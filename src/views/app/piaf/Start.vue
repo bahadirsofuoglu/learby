@@ -26,40 +26,100 @@
         </b-card>
       </b-colxx>
     </b-row>
+
+    <!--    <b-row>
+      <b-colxx xxs="12">
+        <b-card>
+          <vuetable
+            table-height="360px"
+            ref="vuetable"
+            :api-url="apiBase"
+            class="order-with-arrow"
+            :query-params="makeQueryParams"
+            :per-page="perPage"
+            :reactive-api-url="true"
+            :fields="fields"
+            pagination-path
+            :row-class="onRowClass"
+            @vuetable:pagination-data="onPaginationData"
+            @vuetable:row-clicked="rowClicked"
+            @vuetable:cell-rightclicked="rightClicked"
+          >
+            <template slot="actions" slot-scope="props">
+              <b-form-checkbox
+                :checked="selectedItems.includes(props.rowData.id)"
+                class="itemCheck mb-0"
+              ></b-form-checkbox>
+            </template>
+          </vuetable>
+        </b-card>
+        <vuetable-pagination-bootstrap
+          class="mt-4"
+          ref="pagination"
+          @vuetable-pagination:change-page="onChangePage"
+        />
+      </b-colxx>
+    </b-row> -->
   </div>
 </template>
 <script>
+/* import Vuetable from 'vuetable-2/src/components/Vuetable' */
+
 import firebase from 'firebase'
 const db = firebase.firestore()
 
 export default {
+  components: {
+    /*   vuetable: Vuetable */
+  },
   data () {
     return {
-      cards: []
+      cards: [],
+      fields: [
+        {
+          name: 'title',
+          sortField: 'title',
+          title: 'English',
+          titleClass: '',
+          dataClass: 'list-item-heading',
+          width: '40%'
+        },
+        {
+          name: 'sales',
+          sortField: 'sales',
+          title: 'Turkish',
+          titleClass: '',
+          dataClass: 'text-muted',
+          width: '40%'
+        },
+        {
+          name: 'stock',
+          sortField: 'stock',
+          title: 'Category',
+          titleClass: '',
+          dataClass: 'text-muted',
+          width: '20%'
+        }
+      ]
     }
   },
   created () {
-    db.collection('cards').onSnapshot(snapshotChange => {
-      this.cards = []
-      snapshotChange.forEach(doc => {
-        this.cards.push({
-          front: doc.data().front,
-          back: doc.data().back,
-          flipped: doc.data().flipped
+    db.collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('cards')
+      .onSnapshot(snapshotChange => {
+        this.cards = []
+        snapshotChange.forEach(doc => {
+          this.cards.push({
+            front: doc.data().front,
+            back: doc.data().back,
+            flipped: doc.data().flipped
+          })
+          console.log(this.cards)
         })
-        console.log(this.cards)
       })
-    })
     this.addCard()
-    /*    db.collection('users')
-      .add({
-        uid: firebase.auth().currentUser.uid,
-        email: firebase.auth().currentUser.email
-      })
-
-      .catch(error => {
-        console.log(error)
-      }) */
+    console.log(firebase.auth().currentUser)
   },
   methods: {
     toggleCard (card) {

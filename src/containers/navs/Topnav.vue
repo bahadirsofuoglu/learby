@@ -86,85 +86,6 @@
       </div>
       <div class="header-icons d-inline-block align-middle">
         <div class="position-relative d-none d-sm-inline-block">
-          <b-dropdown
-            variant="empty"
-            size="sm"
-            right
-            toggle-class="header-icon"
-            menu-class="position-absolute mt-3 iconMenuDropdown"
-            no-caret
-          >
-            <template slot="button-content">
-              <i class="simple-icon-grid" />
-            </template>
-            <div>
-              <router-link tag="a" to="#" class="icon-menu-item">
-                <i class="iconsminds-shop-4 d-block" />
-                {{ $t('menu.dashboards') }}
-              </router-link>
-              <router-link tag="a" to="#" class="icon-menu-item">
-                <i class="iconsminds-pantone d-block" />
-                {{ $t('menu.ui') }}
-              </router-link>
-              <router-link tag="a" to="#" class="icon-menu-item">
-                <i class="iconsminds-bar-chart-4 d-block" />
-                {{ $t('menu.charts') }}
-              </router-link>
-              <router-link tag="a" to="#" class="icon-menu-item">
-                <i class="iconsminds-speach-bubble d-block" />
-                {{ $t('menu.chat') }}
-              </router-link>
-              <router-link tag="a" to="#" class="icon-menu-item">
-                <i class="iconsminds-formula d-block" />
-                {{ $t('menu.survey') }}
-              </router-link>
-              <router-link tag="a" to="#" class="icon-menu-item">
-                <i class="iconsminds-check d-block" />
-                {{ $t('menu.todo') }}
-              </router-link>
-            </div>
-          </b-dropdown>
-        </div>
-
-        <div class="position-relative d-inline-block">
-          <b-dropdown
-            variant="empty"
-            size="sm"
-            right
-            toggle-class="header-icon notificationButton"
-            menu-class="position-absolute mt-3 notificationDropdown"
-            no-caret
-          >
-            <template slot="button-content">
-              <i class="simple-icon-bell" />
-              <span class="count">3</span>
-            </template>
-            <vue-perfect-scrollbar
-              :settings="{ suppressScrollX: true, wheelPropagation: false }"
-            >
-              <div
-                class="d-flex flex-row mb-3 pb-3 border-bottom"
-                v-for="(n, index) in notifications"
-                :key="index"
-              >
-                <router-link tag="a" to="#">
-                  <img
-                    :src="n.img"
-                    :alt="n.title"
-                    class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"
-                  />
-                </router-link>
-                <div class="pl-3 pr-2">
-                  <router-link tag="a" to="#">
-                    <p class="font-weight-medium mb-1">{{ n.title }}</p>
-                    <p class="text-muted mb-0 text-small">{{ n.date }}</p>
-                  </router-link>
-                </div>
-              </div>
-            </vue-perfect-scrollbar>
-          </b-dropdown>
-        </div>
-        <div class="position-relative d-none d-sm-inline-block">
           <div class="btn-group">
             <b-button
               variant="empty"
@@ -192,9 +113,9 @@
           no-caret
         >
           <template slot="button-content">
-            <span class="name mr-1">{{ currentUser.title }}</span>
+            <span class="name mr-1">{{ userName }}</span>
             <span>
-              <img :alt="currentUser.title" :src="currentUser.img" />
+              <img :alt="currentUser.title" :src="photoUrl" />
             </span>
           </template>
           <b-dropdown-item>Account</b-dropdown-item>
@@ -212,7 +133,7 @@
 <script>
 import Switches from 'vue-switches'
 import notifications from '../../data/notifications'
-
+import firebase from 'firebase'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { MenuIcon, MobileMenuIcon } from '../../components/Svg'
 import {
@@ -236,6 +157,8 @@ export default {
   },
   data () {
     return {
+      photoUrl: firebase.auth().currentUser.photoURL,
+      userName: firebase.auth().currentUser.displayName,
       searchKeyword: '',
       isMobileSearch: false,
       isSearchOver: false,
