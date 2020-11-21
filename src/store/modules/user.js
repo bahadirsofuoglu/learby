@@ -135,6 +135,27 @@ export default {
           }
         )
     },
+    signUserInGoogle ({ commit }) {
+      commit('setLoading', true)
+      commit('clearError')
+      firebase
+        .auth()
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+        .then(
+          user => {
+            const item = { uid: user.user.uid, ...currentUser }
+            setCurrentUser(item)
+            commit('setUser', item)
+          },
+          err => {
+            setCurrentUser(null)
+            commit('setError', err.message)
+            setTimeout(() => {
+              commit('clearError')
+            }, 3000)
+          }
+        )
+    },
 
     signOut ({ commit }) {
       firebase

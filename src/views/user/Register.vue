@@ -18,15 +18,19 @@
           <h6 class="mb-4">{{ $t('user.register') }}</h6>
           <b-form @submit.prevent="formSubmit">
             <label class="form-group has-float-label mb-4">
-              <input type="text" class="form-control" v-model="fullname" />
+              <input type="text" class="form-control" v-model="form.fullname" />
               <span>{{ $t('user.fullname') }}</span>
             </label>
             <label class="form-group has-float-label mb-4">
-              <input type="email" class="form-control" v-model="email" />
+              <input type="email" class="form-control" v-model="form.email" />
               <span>{{ $t('user.email') }}</span>
             </label>
             <label class="form-group has-float-label mb-4">
-              <input type="password" class="form-control" v-model="password" />
+              <input
+                type="password"
+                class="form-control"
+                v-model="form.password"
+              />
               <span>{{ $t('user.password') }}</span>
             </label>
             <div class="d-flex justify-content-end align-items-center">
@@ -45,7 +49,7 @@
   </b-row>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { validationMixin } from 'vuelidate'
 const {
   required,
@@ -53,11 +57,11 @@ const {
   minLength,
   email
 } = require('vuelidate/lib/validators')
+import { adminRoot } from '../../constants/config'
 export default {
   data () {
     return {
       form: {
-        name: '',
         email: '',
         password: ''
       }
@@ -77,13 +81,15 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['currentUser', 'processing', 'loginError'])
+  },
   methods: {
     ...mapActions(['register']),
     formSubmit () {
-      this.$v.$touch()
       /*    this.form.email = "piaf-vue@coloredstrategies.com";
             this.form.password = "piaf123"; */
-      this.$v.form.$touch()
+
       // if (!this.$v.form.$anyError) {
       this.register({
         email: this.form.email,

@@ -21,7 +21,7 @@
           <h6 class="mb-4">{{ $t('user.login-title') }}</h6>
 
           <b-form
-            @submit.prevent="formSubmit"
+            @submit.prevent="onSigninGoogle"
             class="av-tooltip tooltip-label-bottom"
           >
             <b-form-group
@@ -141,18 +141,8 @@ export default {
     ...mapGetters(['currentUser', 'processing', 'loginError'])
   },
   methods: {
-    ...mapActions(['login']),
-    formSubmit () {
-      this.$v.$touch()
-      /*    this.form.email = "piaf-vue@coloredstrategies.com";
-            this.form.password = "piaf123"; */
-      this.$v.form.$touch()
-      // if (!this.$v.form.$anyError) {
-      this.login({
-        email: this.form.email,
-        password: this.form.password
-      })
-      //}
+    onSigninGoogle () {
+      this.$store.dispatch('signUserInGoogle')
     }
   },
   watch: {
