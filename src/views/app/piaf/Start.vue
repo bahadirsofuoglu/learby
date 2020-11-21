@@ -50,10 +50,30 @@ export default {
         console.log(this.cards)
       })
     })
+    this.addCard()
+    /*    db.collection('users')
+      .add({
+        uid: firebase.auth().currentUser.uid,
+        email: firebase.auth().currentUser.email
+      })
+
+      .catch(error => {
+        console.log(error)
+      }) */
   },
   methods: {
-    toggleCard: function (card) {
+    toggleCard (card) {
       card.flipped = !card.flipped
+    },
+    addCard () {
+      db.collection('users')
+        .doc(firebase.auth().currentUser.uid)
+        .collection('cards')
+        .add({
+          front: 'aaaa',
+          back: 'bbbb',
+          flipped: false
+        })
     }
   }
 }
