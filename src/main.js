@@ -28,29 +28,30 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import { getCurrentLanguage } from './utils'
 
-Vue.use(BootstrapVue);
-Vue.use(VueI18n);
-const messages = { en: en, es: es };
-const locale = getCurrentLanguage();
+Vue.use(BootstrapVue)
+Vue.use(VueI18n)
+const messages = { en: en, es: es }
+const locale = getCurrentLanguage()
 const i18n = new VueI18n({
   locale: locale,
   fallbackLocale: 'en',
   messages
-});
-Vue.use(Notifications);
-Vue.use(require('vue-shortkey'));
-Vue.use(contentmenu);
-Vue.use(VueScrollTo);
+})
+Vue.use(Notifications)
+Vue.use(require('vue-shortkey'))
+Vue.use(contentmenu)
+Vue.use(VueScrollTo)
 Vue.use(VueLineClamp, {
   importCss: true
-});
+})
 
-Vue.component('piaf-breadcrumb', Breadcrumb);
-Vue.component('b-refresh-button', RefreshButton);
-Vue.component('b-colxx', Colxx);
-Vue.component('vue-perfect-scrollbar', vuePerfectScrollbar);
+Vue.component('piaf-breadcrumb', Breadcrumb)
+Vue.component('b-refresh-button', RefreshButton)
+Vue.component('b-colxx', Colxx)
+Vue.component('vue-perfect-scrollbar', vuePerfectScrollbar)
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
+
 Vue.config.productionTip = false
 
 export default new Vue({
