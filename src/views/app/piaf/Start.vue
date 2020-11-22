@@ -2,6 +2,29 @@
   <div>
     <b-row>
       <b-colxx xxs="12">
+        <h1>Magdalena Cake</h1>
+        <div class="top-right-button-container">
+          <b-dropdown
+            id="ddown5"
+            :text="$t('pages.actions')"
+            size="lg"
+            variant="outline-primary"
+            class="top-right-button top-right-button-single"
+            no-fade="true"
+          >
+            <b-dropdown-header>{{ $t('pages.header') }}</b-dropdown-header>
+            <b-dropdown-item>{{ $t('pages.delete') }}</b-dropdown-item>
+            <b-dropdown-item>{{ $t('pages.another-action') }}</b-dropdown-item>
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item>{{ $t('pages.another-action') }}</b-dropdown-item>
+          </b-dropdown>
+        </div>
+        <piaf-breadcrumb />
+        <div class="separator mb-5"></div>
+      </b-colxx>
+    </b-row>
+    <b-row>
+      <b-colxx xxs="12">
         <b-card class="mb-12" :title="'All Cards'">
           <div>
             <ul class="flashcard-list">
@@ -27,7 +50,7 @@
       </b-colxx>
     </b-row>
 
-    <!--     <b-row>
+    <b-row>
       <b-colxx xxs="12">
         <b-card>
           <vuetable
@@ -35,43 +58,38 @@
             ref="vuetable"
             :api-mode="false"
             class="order-with-arrow"
-            :query-params="makeQueryParams"
-            :per-page="perPage"
-            :reactive-api-url="false"
             :fields="fields"
             :data="cards"
             pagination-path
-            :row-class="onRowClass"
-            @vuetable:pagination-data="onPaginationData"
-            @vuetable:row-clicked="rowClicked"
-            @vuetable:cell-rightclicked="rightClicked"
           >
             <template slot="actions" slot-scope="props">
-              <b-form-checkbox
-                :checked="selectedItems.includes(props.rowData.id)"
-                class="itemCheck mb-0"
-              ></b-form-checkbox>
+              <b-row>
+                <b-colxx>
+                  <b-button size="xs" variant="outline-warning">
+                    <i class="simple-icon-pencil"
+                  /></b-button>
+                  <b-button size="xs" variant="outline-warning">
+                    <i class="simple-icon-trash"
+                  /></b-button>
+                </b-colxx>
+              </b-row>
             </template>
           </vuetable>
         </b-card>
-        <vuetable-pagination-bootstrap
-          class="mt-4"
-          ref="pagination"
-          @vuetable-pagination:change-page="onChangePage"
-        />
       </b-colxx>
-    </b-row> -->
+    </b-row>
   </div>
 </template>
 <script>
-/* import Vuetable from 'vuetable-2/src/components/Vuetable' */
+import Vuetable from 'vuetable-2/src/components/Vuetable'
+
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 const db = firebase.firestore()
 
 export default {
   components: {
-    /*  vuetable: Vuetable */
+    vuetable: Vuetable
   },
   data () {
     return {
@@ -79,27 +97,34 @@ export default {
 
       fields: [
         {
-          name: 'title',
-          sortField: 'title',
+          name: 'back',
+          sortField: 'back',
           title: 'English',
-          titleClass: '',
+          titleClass: 'back',
           dataClass: 'list-item-heading',
-          width: '40%'
+          width: '30%'
         },
         {
-          name: 'sales',
-          sortField: 'sales',
+          name: 'front',
+          sortField: 'front',
           title: 'Turkish',
           titleClass: '',
-          dataClass: 'text-muted',
-          width: '40%'
+          dataClass: 'list-item-heading',
+          width: '30%'
         },
         {
           name: 'stock',
           sortField: 'stock',
           title: 'Category',
           titleClass: '',
-          dataClass: 'text-muted',
+          dataClass: 'list-item-heading',
+          width: '20%'
+        },
+        {
+          name: '__slot:actions',
+          title: 'Actions',
+          titleClass: '',
+          dataClass: 'list-item-heading',
           width: '20%'
         }
       ]
