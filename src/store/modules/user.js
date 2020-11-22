@@ -143,12 +143,7 @@ export default {
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
         .then(
           user => {
-            const item = {
-              uid: user.user.uid,
-              photoUrl: user.user.photoURL,
-              userName: user.user.displayName,
-              ...currentUser
-            }
+            const item = user.user
             setCurrentUser(item)
             commit('setUser', item)
           },

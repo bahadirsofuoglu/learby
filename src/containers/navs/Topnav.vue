@@ -86,9 +86,9 @@
           no-caret
         >
           <template slot="button-content">
-            <span class="name mr-1"></span>
+            <span class="name mr-1">{{ currentUser.displayName }}</span>
             <span>
-              <!-- <img :alt="" :src="" /> -->
+              <img :alt="currentUser.photoURL" :src="currentUser.photoURL" />
             </span>
           </template>
 

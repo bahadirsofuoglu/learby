@@ -27,7 +27,7 @@
       </b-colxx>
     </b-row>
 
-    <b-row>
+    <!--     <b-row>
       <b-colxx xxs="12">
         <b-card>
           <vuetable
@@ -60,23 +60,23 @@
           @vuetable-pagination:change-page="onChangePage"
         />
       </b-colxx>
-    </b-row>
+    </b-row> -->
   </div>
 </template>
 <script>
-import Vuetable from 'vuetable-2/src/components/Vuetable'
+/* import Vuetable from 'vuetable-2/src/components/Vuetable' */
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 const db = firebase.firestore()
 
 export default {
   components: {
-    vuetable: Vuetable
+    /*  vuetable: Vuetable */
   },
   data () {
     return {
       cards: [],
-      userUid: firebase.auth().currentUser.uid,
+
       fields: [
         {
           name: 'title',
@@ -107,7 +107,7 @@ export default {
   },
   created () {
     db.collection('users')
-      .doc(this.userUid)
+      .doc(this.currentUser.uid)
       .collection('cards')
       .onSnapshot(snapshotChange => {
         this.cards = []
@@ -119,6 +119,7 @@ export default {
           })
         })
       })
+    console.log(this.currentUser)
   },
   computed: {
     ...mapGetters(['currentUser', 'processing', 'loginError'])
@@ -129,7 +130,7 @@ export default {
     },
     addCard () {
       db.collection('users')
-        .doc(this.userUid)
+        .doc(this.currentUser.uid)
         .collection('cards')
         .add({
           front: 'aaaa',
