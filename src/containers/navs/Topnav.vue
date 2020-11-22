@@ -86,9 +86,9 @@
           no-caret
         >
           <template slot="button-content">
-            <span class="name mr-1">{{ userName }}</span>
+            <span class="name mr-1"></span>
             <span>
-              <img :alt="currentUser.title" :src="photoUrl" />
+              <!-- <img :alt="" :src="" /> -->
             </span>
           </template>
 
@@ -124,10 +124,13 @@ export default {
     'mobile-menu-icon': MobileMenuIcon,
     switches: Switches
   },
+  created () {
+    console.log(localStorage.getItem('user'))
+    this.userInfo = localStorage.user
+  },
   data () {
     return {
-      photoUrl: firebase.auth().currentUser.photoURL,
-      userName: firebase.auth().currentUser.displayName,
+      userInfo: null,
       searchKeyword: '',
       isMobileSearch: false,
       isSearchOver: false,

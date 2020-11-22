@@ -27,18 +27,19 @@
       </b-colxx>
     </b-row>
 
-    <!--    <b-row>
+    <b-row>
       <b-colxx xxs="12">
         <b-card>
           <vuetable
             table-height="360px"
             ref="vuetable"
-            :api-url="apiBase"
+            :api-mode="false"
             class="order-with-arrow"
             :query-params="makeQueryParams"
             :per-page="perPage"
-            :reactive-api-url="true"
+            :reactive-api-url="false"
             :fields="fields"
+            :data="cards"
             pagination-path
             :row-class="onRowClass"
             @vuetable:pagination-data="onPaginationData"
@@ -59,22 +60,23 @@
           @vuetable-pagination:change-page="onChangePage"
         />
       </b-colxx>
-    </b-row> -->
+    </b-row>
   </div>
 </template>
 <script>
-/* import Vuetable from 'vuetable-2/src/components/Vuetable' */
-
+import Vuetable from 'vuetable-2/src/components/Vuetable'
+import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 const db = firebase.firestore()
 
 export default {
   components: {
-    /*   vuetable: Vuetable */
+    vuetable: Vuetable
   },
   data () {
     return {
       cards: [],
+      userUid: firebase.auth().currentUser.uid,
       fields: [
         {
           name: 'title',
@@ -105,7 +107,7 @@ export default {
   },
   created () {
     db.collection('users')
-      .doc(firebase.auth().currentUser.uid)
+      .doc(this.userUid)
       .collection('cards')
       .onSnapshot(snapshotChange => {
         this.cards = []
@@ -115,11 +117,11 @@ export default {
             back: doc.data().back,
             flipped: doc.data().flipped
           })
-          console.log(this.cards)
         })
       })
-    this.addCard()
-    console.log(firebase.auth().currentUser)
+  },
+  computed: {
+    ...mapGetters(['currentUser', 'processing', 'loginError'])
   },
   methods: {
     toggleCard (card) {
@@ -127,7 +129,7 @@ export default {
     },
     addCard () {
       db.collection('users')
-        .doc(firebase.auth().currentUser.uid)
+        .doc(this.userUid)
         .collection('cards')
         .add({
           front: 'aaaa',
