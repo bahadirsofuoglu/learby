@@ -36,33 +36,6 @@
           <i class="simple-icon-magnifier"></i>
         </span>
       </div>
-      <div class="d-inline-block">
-        <b-dropdown
-          id="langddm"
-          class="ml-2"
-          variant="light"
-          size="sm"
-          toggle-class="language-button"
-        >
-          <template slot="button-content">
-            <span class="name">{{ $i18n.locale.toUpperCase() }}</span>
-          </template>
-          <b-dropdown-item
-            v-for="(l, index) in localeOptions"
-            :key="index"
-            @click="changeLocale(l.id, l.direction)"
-            >{{ l.name }}</b-dropdown-item
-          >
-        </b-dropdown>
-      </div>
-      <div class="position-relative d-none d-none d-lg-inline-block">
-        <a
-          class="btn btn-outline-primary btn-sm ml-2"
-          target="_top"
-          :href="buyUrl"
-          >{{ $t('user.buy') }}</a
-        >
-      </div>
     </div>
     <router-link class="navbar-logo" tag="a" :to="adminRoot">
       <span class="logo d-none d-xs-block"></span>
@@ -118,11 +91,7 @@
               <img :alt="currentUser.title" :src="photoUrl" />
             </span>
           </template>
-          <b-dropdown-item>Account</b-dropdown-item>
-          <b-dropdown-item>Features</b-dropdown-item>
-          <b-dropdown-item>History</b-dropdown-item>
-          <b-dropdown-item>Support</b-dropdown-item>
-          <b-dropdown-divider />
+
           <b-dropdown-item @click="logout">Sign out</b-dropdown-item>
         </b-dropdown>
       </div>
