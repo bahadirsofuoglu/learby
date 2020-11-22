@@ -2,28 +2,29 @@
   <div>
     <b-row>
       <b-colxx xxs="12">
-        <h1>Magdalena Cake</h1>
-        <div class="top-right-button-container">
-          <b-dropdown
-            id="ddown5"
-            :text="$t('pages.actions')"
-            size="lg"
-            variant="outline-primary"
-            class="top-right-button top-right-button-single"
-            no-fade="true"
-          >
-            <b-dropdown-header>{{ $t('pages.header') }}</b-dropdown-header>
-            <b-dropdown-item>{{ $t('pages.delete') }}</b-dropdown-item>
-            <b-dropdown-item>{{ $t('pages.another-action') }}</b-dropdown-item>
-            <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item>{{ $t('pages.another-action') }}</b-dropdown-item>
-          </b-dropdown>
-        </div>
-        <piaf-breadcrumb />
+        <h1>asdas</h1>
+
+        <b-button
+          v-if="showMode == true"
+          size="lg"
+          variant="outline-primary"
+          class="top-right-button-container"
+          @click="showModeChange"
+          >Cards</b-button
+        >
+        <b-button
+          v-else
+          size="lg"
+          variant="outline-warning"
+          class="top-right-button-container"
+          @click="showModeChange"
+          >Table</b-button
+        >
+
         <div class="separator mb-5"></div>
       </b-colxx>
     </b-row>
-    <b-row>
+    <b-row v-if="showMode == true">
       <b-colxx xxs="12">
         <b-card class="mb-12" :title="'All Cards'">
           <div>
@@ -50,7 +51,7 @@
       </b-colxx>
     </b-row>
 
-    <b-row>
+    <b-row v-if="showMode == false">
       <b-colxx xxs="12">
         <b-card>
           <vuetable
@@ -62,7 +63,7 @@
             :data="cards"
             pagination-path
           >
-            <template slot="actions" slot-scope="props">
+            <template slot="actions">
               <b-row>
                 <b-colxx>
                   <b-button size="xs" variant="outline-warning">
@@ -94,7 +95,7 @@ export default {
   data () {
     return {
       cards: [],
-
+      showMode: true,
       fields: [
         {
           name: 'back',
@@ -160,8 +161,12 @@ export default {
         .add({
           front: 'aaaa',
           back: 'bbbb',
+          category: 'A1',
           flipped: false
         })
+    },
+    showModeChange () {
+      this.showMode = !this.showMode
     }
   }
 }
