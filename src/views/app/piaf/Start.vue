@@ -2,7 +2,8 @@
   <div>
     <b-row>
       <b-colxx xxs="12">
-        <h1>asdas</h1>
+        <h1 v-if="showMode == true">Card Mode</h1>
+        <h1 v-if="showMode == false">Table Mode</h1>
 
         <b-button
           v-if="showMode == true"
@@ -10,17 +11,33 @@
           variant="outline-primary"
           class="top-right-button-container"
           @click="showModeChange"
-          >Cards</b-button
+          >Table</b-button
         >
+
         <b-button
-          v-else
+          v-if="showMode == false"
           size="lg"
           variant="outline-warning"
           class="top-right-button-container"
           @click="showModeChange"
-          >Table</b-button
+          >Cards</b-button
         >
-
+        <b-button v-b-modal.modallg variant="outline-primary" class="mr-2 mb-2"
+          >Add Card</b-button
+        >
+        <b-modal id="modallg" size="lg" title="Large Modal">
+          Hello Modal!
+          <template slot="modal-footer">
+            <b-button
+              variant="outline-secondary"
+              @click="hideModal('v-b-modal.modallg')"
+              >Cancel</b-button
+            >
+            <b-button variant="primary" @click="addItem()" class="mr-1"
+              >Submit</b-button
+            >
+          </template>
+        </b-modal>
         <div class="separator mb-5"></div>
       </b-colxx>
     </b-row>
@@ -131,6 +148,7 @@ export default {
       ]
     }
   },
+
   created () {
     db.collection('users')
       .doc(this.currentUser.uid)
@@ -288,23 +306,6 @@ input {
   border: 2px solid #eaeaea;
   padding: 10px;
   outline: none;
-}
-
-button {
-  border-radius: 5px;
-  border: 1px solid #87cb84;
-  background-color: #87cb84;
-  padding: 8px 15px;
-  outline: none;
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  background-color: #70a66f;
 }
 
 .error {
