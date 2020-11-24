@@ -9,10 +9,10 @@
       :data="cards"
       pagination-path
     >
-      <template slot="actions">
+      <template slot="actions" slot-scope="row">
         <b-row>
           <b-colxx>
-            <b-button size="xs" variant="outline-warning">
+            <b-button size="xs" variant="outline-warning" @click="edit(row)">
               <i class="simple-icon-pencil"
             /></b-button>
             <b-button size="xs" variant="outline-warning">
@@ -70,6 +70,17 @@ export default {
           width: '20%'
         }
       ]
+    }
+  },
+  methods: {
+    edit (row) {
+      console.log('hello')
+      console.log(row)
+
+      const denemeCards = this.cards.filter(x => {
+        return x.front !== row.front && x.back !== row.back
+      })
+      console.log(denemeCards)
     }
   }
 }
