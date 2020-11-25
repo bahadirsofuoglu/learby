@@ -46,16 +46,16 @@ export default {
     return {
       fields: [
         {
-          name: 'back',
-          sortField: 'back',
+          name: 'front',
+          sortField: 'front',
           title: 'English',
           titleClass: 'back',
           dataClass: 'list-item-heading',
           width: '30%'
         },
         {
-          name: 'front',
-          sortField: 'front',
+          name: 'back',
+          sortField: 'back',
           title: 'Turkish',
           titleClass: '',
           dataClass: 'list-item-heading',
@@ -93,6 +93,7 @@ export default {
         .collection('cards')
         .doc(row.rowData.key)
         .delete()
+        .then(this.$notify('warning', 'Hey!!', 'You Deleted a Card'))
         .catch(error => {
           console.error(error)
         })

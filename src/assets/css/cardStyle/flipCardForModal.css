@@ -10,7 +10,7 @@ li {
   transition: all 0.3s ease;
 }
 
-.flipCard {
+.modalFlipCard {
   display: block;
   width: 150px;
   height: 175px;

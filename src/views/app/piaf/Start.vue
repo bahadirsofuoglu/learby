@@ -29,8 +29,10 @@
         <b-modal id="modallg" size="lg" title="Add a New Card">
           <AddCardModal ref="addCardModal" />
           <template slot="modal-footer">
-            <b-button variant="outline-secondary">Cancel</b-button>
-            <b-button variant="warning" @click="addItem()" class="mr-1"
+            <b-button variant="outline-secondary" @click="closeModal"
+              >Cancel</b-button
+            >
+            <b-button variant="warning" @click="addCard" class="mr-1"
               >Submit</b-button
             >
           </template>
@@ -99,23 +101,16 @@ export default {
     ...mapGetters(['currentUser', 'processing', 'loginError'])
   },
   methods: {
-    addItem () {
-      this.$refs.addCardModal.addItem()
+    addCard () {
+      this.$refs.addCardModal.addCard()
+    },
+    closeModal () {
+      this.$refs.addCardModal.hide()
     },
     toggleCard (card) {
       card.flipped = !card.flipped
     },
-    addCard () {
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('cards')
-        .add({
-          front: 'aaaa',
-          back: 'bbbb',
-          category: 'A1',
-          flipped: false
-        })
-    },
+
     showModeChange () {
       this.showMode = !this.showMode
     },

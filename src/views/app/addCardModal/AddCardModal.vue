@@ -40,7 +40,7 @@
               "
             >
               <transition name="flip">
-                <p :key="newCard.flipped" class="flipCard">
+                <p :key="newCard.flipped" class="modalFlipCard">
                   {{ newCard.flipped ? newCard.back : newCard.front }}
                 </p>
               </transition>
@@ -67,12 +67,12 @@ export default {
       direction: getDirection().direction,
       selected: null,
       selectData: [
-        { label: 'a1' },
-        { label: 'a2' },
-        { label: 'b1' },
-        { label: 'b2' },
-        { label: 'c1' },
-        { label: 'c2' }
+        { label: 'a1', value: 'a1' },
+        { label: 'a2', value: 'a2' },
+        { label: 'b1', value: 'b1' },
+        { label: 'b2', value: 'b2' },
+        { label: 'c1', value: 'c1' },
+        { label: 'c2', value: 'c2' }
       ],
       newCard: {
         flipped: false
@@ -83,14 +83,19 @@ export default {
     ...mapGetters(['currentUser'])
   },
   methods: {
-    addItem () {
+    addCard () {
       console.log(this.selected.label)
       this.newCard.category = this.selected.label
       db.collection('users')
         .doc(this.currentUser.uid)
         .collection('cards')
         .add(this.newCard)
-        .then(console.log('sended to db'))
+        .then(
+          this.$notify('success', 'Congratulations!', 'You Added a New Card')
+        )
+        .catch(error => {
+          console.error(error)
+        })
     }
   }
 }
