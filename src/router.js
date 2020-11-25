@@ -30,29 +30,6 @@ const routes = [
             // meta: { roles: [UserRole.Admin, UserRole.Editor] },
           }
         ]
-      },
-      {
-        path: 'second-menu',
-        component: () =>
-          import(
-            /* webpackChunkName: "second-menu" */ './views/app/second-menu'
-          ),
-        redirect: `${adminRoot}/second-menu/second`,
-        children: [
-          {
-            path: 'second',
-            component: () =>
-              import(
-                /* webpackChunkName: "piaf" */ './views/app/second-menu/Second'
-              )
-          }
-        ]
-      },
-
-      {
-        path: 'single',
-        component: () =>
-          import(/* webpackChunkName: "single" */ './views/app/single')
       }
     ]
   },
