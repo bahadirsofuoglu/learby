@@ -26,7 +26,8 @@
           class="top-right-button-container"
           >Add Card</b-button
         >
-        <b-modal id="modallg" size="lg" title="Large Modal">
+        <b-modal id="modallg" size="lg" title="Add a New Card">
+          <AddCardModal ref="addCardModal" />
           <template slot="modal-footer">
             <b-button variant="outline-secondary">Cancel</b-button>
             <b-button variant="warning" @click="addItem()" class="mr-1"
@@ -75,11 +76,13 @@
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 import Edit from '../table/Edit.vue'
+import AddCardModal from '../addCardModal/AddCardModal'
 const db = firebase.firestore()
 
 export default {
   components: {
-    Edit
+    Edit,
+    AddCardModal
   },
 
   data () {
@@ -96,6 +99,9 @@ export default {
     ...mapGetters(['currentUser', 'processing', 'loginError'])
   },
   methods: {
+    addItem () {
+      this.$refs.addCardModal.addItem()
+    },
     toggleCard (card) {
       card.flipped = !card.flipped
     },
@@ -118,16 +124,16 @@ export default {
         .doc(this.currentUser.uid)
         .collection('cards')
         .onSnapshot(snapshotChange => {
-          this.loadCards = []
+          this.cards = []
           snapshotChange.forEach(doc => {
-            this.loadCards.push({
+            this.cards.push({
               key: doc.id,
               front: doc.data().front,
               back: doc.data().back,
+              category: doc.data().category,
               flipped: doc.data().flipped
             })
           })
-          this.cards = this.loadCards
         })
     }
   }

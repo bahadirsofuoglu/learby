@@ -62,9 +62,9 @@ export default {
           width: '30%'
         },
         {
-          name: 'stock',
-          sortField: 'stock',
-          title: 'Category',
+          name: 'category',
+          sortField: 'category',
+          title: 'category',
           titleClass: '',
           dataClass: 'list-item-heading',
           width: '20%'
