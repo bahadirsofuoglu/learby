@@ -1,20 +1,22 @@
-import { adminRoot } from "./config";
-import { UserRole } from "../utils/auth.roles";
+import { adminRoot } from './config'
+import { UserRole } from '../utils/auth.roles'
 
-const data = [{
-  id: "piaf",
-  icon: "iconsminds-shop",
-  label: "menu.piaf",
-  to: `${adminRoot}/piaf`,
-  subs: [{
-    icon: "simple-icon-paper-plane",
-    label: "menu.start",
-    to: `${adminRoot}/piaf/start`,
-    // roles: [UserRole.Admin, UserRole.Editor],
-  },
-  ]
-},
-{
+const data = [
+  {
+    id: 'piaf',
+    icon: 'iconsminds-shop',
+    label: 'menu.piaf',
+    to: `${adminRoot}/piaf`,
+    subs: [
+      {
+        icon: 'simple-icon-paper-plane',
+        label: 'menu.start',
+        to: `${adminRoot}/piaf/start`
+        // roles: [UserRole.Admin, UserRole.Editor],
+      }
+    ]
+  }
+  /* {
   id: "second-menu",
   icon: "iconsminds-chemical",
   label: "menu.second-menu",
@@ -67,6 +69,6 @@ const data = [{
   label: "menu.docs",
   to: "https://piaf-vue-docs.coloredstrategies.com/",
   newWindow: true
-}
-];
-export default data;
+} */
+]
+export default data

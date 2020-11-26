@@ -18,13 +18,13 @@ const routes = [
    */
     children: [
       {
-        path: 'piaf',
+        path: '/app',
         component: () =>
           import(/* webpackChunkName: "piaf" */ './views/app/piaf'),
         redirect: `${adminRoot}/piaf/start`,
         children: [
           {
-            path: 'start',
+            path: '/',
             component: () =>
               import(/* webpackChunkName: "piaf" */ './views/app/piaf/Start')
             // meta: { roles: [UserRole.Admin, UserRole.Editor] },

@@ -12,7 +12,12 @@
       <template slot="actions" slot-scope="row">
         <b-row>
           <b-colxx>
-            <b-button size="xs" variant="outline-warning" @click="onEdit(row)">
+            <b-button
+              v-b-modal.forEdit
+              size="xs"
+              variant="outline-warning"
+              @click="onEdit(row)"
+            >
               <i class="simple-icon-pencil"
             /></b-button>
             <b-button
@@ -26,16 +31,26 @@
         </b-row>
       </template>
     </vuetable>
+    <b-modal id="forEdit" size="lg" title="Update Card">
+      <UpdateCardModal ref="updateCardModal" :willUpdateCard="willUpdateCard" />
+      <template slot="modal-footer">
+        <b-button variant="warning" @click="updateCard" class="mr-1"
+          >Update</b-button
+        >
+      </template>
+    </b-modal>
   </b-card>
 </template>
 <script>
+import UpdateCardModal from '../addCardModal/UpdateCardModal'
 import { mapGetters } from 'vuex'
 import Vuetable from 'vuetable-2/src/components/Vuetable'
 import firebase from 'firebase'
 const db = firebase.firestore()
 export default {
   components: {
-    vuetable: Vuetable
+    vuetable: Vuetable,
+    UpdateCardModal
   },
   props: {
     cards: {
@@ -76,7 +91,8 @@ export default {
           dataClass: 'list-item-heading',
           width: '20%'
         }
-      ]
+      ],
+      willUpdateCard: null
     }
   },
   created () {},
@@ -98,8 +114,12 @@ export default {
           console.error(error)
         })
     },
+    updateCard () {
+      this.$refs.updateCardModal.updateCardMethod()
+    },
     onEdit (row) {
-      console.log(row)
+      this.willUpdateCard = row.rowData
+      console.log(this.updateCard)
     }
   }
 }

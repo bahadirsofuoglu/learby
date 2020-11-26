@@ -4,95 +4,23 @@
       <b-card class="auth-card" no-body>
         <div class="position-relative image-side">
           <p class="text-white h2">
-            {{ $t('dashboards.magic-is-in-the-details') }}
+            Learby
           </p>
           <p class="white mb-0">
-            Please use your credentials to login.
-            <br />If you are not a member, please
-            <router-link tag="a" to="/user/register" class="white"
-              >register</router-link
-            >.
+            It stores the words you want to memorize<br />
+            while learning a new language.<br />
+            Teaches you those words in a fun way
           </p>
         </div>
         <div class="form-side">
-          <router-link tag="a" to="/">
-            <span class="logo-single" />
-          </router-link>
-          <h6 class="mb-4">{{ $t('user.login-title') }}</h6>
-
           <b-form
             @submit.prevent="onSigninGoogle"
             class="av-tooltip tooltip-label-bottom"
           >
-            <b-form-group
-              :label="$t('user.email')"
-              class="has-float-label mb-4"
-            >
-              <b-form-input
-                type="text"
-                v-model="$v.form.email.$model"
-                :state="!$v.form.email.$error"
-              />
-              <b-form-invalid-feedback v-if="!$v.form.email.required"
-                >Please enter your email address</b-form-invalid-feedback
-              >
-              <b-form-invalid-feedback v-else-if="!$v.form.email.email"
-                >Please enter a valid email address</b-form-invalid-feedback
-              >
-              <b-form-invalid-feedback v-else-if="!$v.form.email.minLength"
-                >Your email must be minimum 4
-                characters</b-form-invalid-feedback
-              >
-            </b-form-group>
-
-            <b-form-group
-              :label="$t('user.password')"
-              class="has-float-label mb-4"
-            >
-              <b-form-input
-                type="password"
-                v-model="$v.form.password.$model"
-                :state="!$v.form.password.$error"
-              />
-              <b-form-invalid-feedback v-if="!$v.form.password.required"
-                >Please enter your password</b-form-invalid-feedback
-              >
-              <b-form-invalid-feedback
-                v-else-if="
-                  !$v.form.password.minLength || !$v.form.password.maxLength
-                "
-                >Your password must be between 4 and 16
-                characters</b-form-invalid-feedback
-              >
-            </b-form-group>
-            <div class="d-flex justify-content-between align-items-center">
-              <router-link tag="a" to="/user/forgot-password">{{
-                $t('user.forgot-password-question')
-              }}</router-link>
-              <b-button
-                type="submit"
-                variant="primary"
-                size="lg"
-                :disabled="processing"
-                :class="{
-                  'btn-multiple-state btn-shadow': true,
-                  'show-spinner': processing,
-                  'show-success': !processing && loginError === false,
-                  'show-fail': !processing && loginError
-                }"
-              >
-                <span class="spinner d-inline-block">
-                  <span class="bounce1"></span>
-                  <span class="bounce2"></span>
-                  <span class="bounce3"></span>
-                </span>
-                <span class="icon success">
-                  <i class="simple-icon-check"></i>
-                </span>
-                <span class="icon fail">
-                  <i class="simple-icon-exclamation"></i>
-                </span>
-                <span class="label">{{ $t('user.login-button') }}</span>
+            <div>
+              <br /><br />
+              <b-button type="submit" block variant="outline-primary" size="lg">
+                <span class="label">Login with Google</span>
               </b-button>
             </div>
           </b-form>
