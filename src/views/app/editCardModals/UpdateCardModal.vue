@@ -92,13 +92,7 @@ export default {
   computed: {
     ...mapGetters(['currentUser'])
   },
-  /*   watch: {
-    updateCard: function () {
-      if (this.willUpdateCard) {
-        this.willUpdateCard = this.updateCard
-      }
-    }
-  }, */
+
   methods: {
     updateCardMethod () {
       console.log(this.selected.label)

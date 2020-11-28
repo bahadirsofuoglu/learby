@@ -42,7 +42,7 @@
   </b-card>
 </template>
 <script>
-import UpdateCardModal from '../addCardModal/UpdateCardModal'
+import UpdateCardModal from '../editCardModals/UpdateCardModal'
 import { mapGetters } from 'vuex'
 import Vuetable from 'vuetable-2/src/components/Vuetable'
 import firebase from 'firebase'

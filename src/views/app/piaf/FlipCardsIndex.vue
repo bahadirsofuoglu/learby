@@ -45,9 +45,6 @@
             <b-button variant="warning" @click="addCard" class="mr-1"
               >Submit</b-button
             >
-            <b-button variant="warning" @click="hideAddCard" class="mr-1"
-              >Close</b-button
-            >
           </template>
         </b-modal>
       </b-colxx>
@@ -63,7 +60,7 @@
                 :key="card.front"
               >
                 <transition name="flip">
-                  <p v-bind:key="card.flipped" class="flipCard">
+                  <p v-bind:key="card.flipped" class="flipCard ml-5">
                     {{ card.flipped ? card.back : card.front }}
                     <span
                       v-on:click="cards.splice(index, 1)"

@@ -87,7 +87,6 @@ export default {
         .split('/')
         .filter(x => x !== '')[1]
       if (currentParentUrl !== undefined || currentParentUrl !== null) {
-        this.selectedParentMenu = currentParentUrl.toLowerCase()
       } else {
         this.selectedParentMenu = 'dashboards'
       }
@@ -273,7 +272,6 @@ export default {
       if (to.path !== from.path) {
         const toParentUrl = to.path.split('/').filter(x => x !== '')[1]
         if (toParentUrl !== undefined || toParentUrl !== null) {
-          this.selectedParentMenu = toParentUrl.toLowerCase()
         } else {
           this.selectedParentMenu = 'dashboards'
         }

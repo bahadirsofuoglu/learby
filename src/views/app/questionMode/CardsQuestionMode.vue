@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card :title="'Question Mode'">
+    <b-card :title="'Question Mode'" style="min-height: 700px">
       <br />
       <br />
       <br />
@@ -25,22 +25,16 @@
                     class="form-control"
                     required
                     v-model="answer"
+                    @keyup.enter="answerQuestion(answer)"
                   />
                   <span>Answer</span>
-                  <b-button
+                  <!--  <b-button
                     variant="warning"
                     style="min-width: 50px"
                     class=" mt-3 float-left"
                     @click="answerQuestion(answer)"
                     >Check</b-button
-                  >
-                  <b-button
-                    variant="success"
-                    style="min-width: 50px"
-                    class=" mt-3 ml-5 float-left"
-                    @click="answerQuestion(answer)"
-                    >Next</b-button
-                  >
+                  > -->
                 </label>
               </b-colxx>
               <b-colxx xxs="4" md="4"> </b-colxx>
@@ -49,7 +43,28 @@
         </b-colxx>
       </b-row>
       <b-row v-if="cardsLengthControl == true">
-        <h4>HELAL</h4>
+        <b-colxx xxs="3" md="5"></b-colxx>
+        <b-colxx xxs="4" md="4">
+          <div class="float-left">
+            <transition name="flip">
+              <p v-bind:key="randomCard.flipped" class="flipCard">
+                {{ randomCard.flipped ? randomCard.back : randomCard.front }}
+              </p>
+            </transition>
+            <b-row>
+              <b-colxx xxs="3" md="5">
+                <b-button
+                  variant="warning"
+                  style="min-width: 50px"
+                  class=" mt-3 float-left"
+                  @click="toggleCard()"
+                  >Congrats
+                </b-button>
+              </b-colxx>
+              <b-colxx xxs="4" md="4"> </b-colxx>
+            </b-row>
+          </div>
+        </b-colxx>
       </b-row>
     </b-card>
   </div>
@@ -58,7 +73,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 import Edit from '../table/Edit.vue'
-import AddCardModal from '../addCardModal/AddCardModal'
+import AddCardModal from '../editCardModals/AddCardModal'
 const db = firebase.firestore()
 
 export default {
@@ -73,7 +88,13 @@ export default {
       cards: [],
       randomCard: null,
       answer: null,
-      cardsLengthControl: false
+      cardsLengthControl: false,
+      lastCard: {
+        front: 'congrats you learned all cards',
+        back: 'Tebrikle Tüm kartları öğrendin',
+        flipped: false,
+        category: 'a1'
+      }
     }
   },
 
@@ -87,6 +108,7 @@ export default {
     cards: function () {
       if (this.cards.length === 0) {
         this.cardsLengthControl = true
+        this.randomCard = this.lastCard
       }
     }
   },
@@ -117,7 +139,7 @@ export default {
           this.randomQuestion()
         })
     },
-    randomQuestion () {
+    async randomQuestion () {
       this.randomCard = null
       this.$notify('dark', 'New Question!', 'We will check your answer')
       this.randomCard = this.cards[
@@ -133,19 +155,26 @@ export default {
           'Congratulations!',
           'Your Answer is true. This cards status is Learned!'
         )
-        await this.toggleCard()
-
-        this.cards = await this.cards.filter(x => x !== this.randomCard)
-        console.log(this.cards)
-        this.randomQuestion()
+        this.toggleCard()
+        setTimeout(async () => {
+          this.cards = await this.cards.filter(x => x !== this.randomCard)
+          console.log(this.cards)
+          this.randomQuestion()
+          this.answer = null
+          this.answer = null
+        }, 1000)
       } else {
         this.$notify(
           'warning',
           'Sorry!',
           'Your Answer is false. Dont worry. You will see this question again'
         )
+        this.toggleCard()
+        setTimeout(async () => {
+          await this.randomQuestion()
+          this.answer = null
+        }, 2000)
         console.log(this.cards)
-        this.randomQuestion()
       }
     }
   }

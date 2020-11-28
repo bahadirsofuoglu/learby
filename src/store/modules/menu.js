@@ -1,8 +1,7 @@
 import { defaultMenuType } from '../../constants/config'
 const state = {
   menuType: defaultMenuType,
-  clickCount: 0,
-  selectedMenuHasSubItems: defaultMenuType === 'menu-default'
+  clickCount: 0
 }
 
 const getters = {
