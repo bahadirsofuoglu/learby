@@ -115,12 +115,9 @@ export default {
 
   methods: {
     toggleCard () {
-      this.randomCard.flipped = !this.randomCard.flipped
+      this.randomCard.flipped = true
     },
 
-    showModeChange () {
-      this.showMode = !this.showMode
-    },
     getAllCards () {
       db.collection('users')
         .doc(this.currentUser.uid)
@@ -140,9 +137,8 @@ export default {
         })
     },
     async randomQuestion () {
-      this.randomCard = null
       this.$notify('dark', 'New Question!', 'We will check your answer')
-      this.randomCard = this.cards[
+      this.randomCard = await this.cards[
         Math.floor(Math.random() * this.cards.length)
       ]
 
@@ -155,14 +151,11 @@ export default {
           'Congratulations!',
           'Your Answer is true. This cards status is Learned!'
         )
-        this.toggleCard()
-        setTimeout(async () => {
-          this.cards = await this.cards.filter(x => x !== this.randomCard)
-          console.log(this.cards)
-          this.randomQuestion()
-          this.answer = null
-          this.answer = null
-        }, 1000)
+
+        this.cards = await this.cards.filter(x => x !== this.randomCard)
+        console.log(this.cards)
+        await this.randomQuestion()
+        this.answer = null
       } else {
         this.$notify(
           'warning',
@@ -171,9 +164,11 @@ export default {
         )
         this.toggleCard()
         setTimeout(async () => {
-          await this.randomQuestion()
-          this.answer = null
+          this.randomCard.flipped = false
         }, 2000)
+
+        await this.randomQuestion()
+        this.answer = null
         console.log(this.cards)
       }
     }

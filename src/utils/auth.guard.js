@@ -3,20 +3,22 @@ import { setCurrentUser, getCurrentUser } from '.'
 export default (to, from, next) => {
   if (to.matched.some(record => record.meta.loginRequired)) {
     if (isAuthGuardActive) {
-      const user = getCurrentUser();
+      const user = getCurrentUser()
       if (user) {
-        const roleArrayHierarchic = to.matched.filter(x => x.meta.roles).map(x => x.meta.roles);
+        const roleArrayHierarchic = to.matched
+          .filter(x => x.meta.roles)
+          .map(x => x.meta.roles)
         if (roleArrayHierarchic.every(x => x.includes(user.role))) {
-          next();
+          next()
         } else {
           next('/unauthorized')
         }
       } else {
-        setCurrentUser(null);
-        next('/user/login')
+        setCurrentUser(null)
+        next('/auth/login')
       }
     } else {
-      next();
+      next()
     }
   } else {
     next()

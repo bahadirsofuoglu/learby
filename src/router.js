@@ -20,14 +20,14 @@ const routes = [
       {
         path: `${adminRoot}`,
         component: () =>
-          import(/* webpackChunkName: "piaf" */ './views/app/piaf'),
+          import(/* webpackChunkName: "piaf" */ './views/app/index'),
         redirect: `${adminRoot}/flipMode`,
         children: [
           {
             path: `${adminRoot}/flipMode`,
             component: () =>
               import(
-                /* webpackChunkName: "piaf" */ './views/app/piaf/FlipCardsIndex.vue'
+                /* webpackChunkName: "piaf" */ './views/app/index/FlipCardsIndex.vue'
               )
             // meta: { roles: [UserRole.Admin, UserRole.Editor] },
           },
@@ -49,28 +49,13 @@ const routes = [
   },
   {
     path: '/',
-    component: () => import(/* webpackChunkName: "user" */ './views/user'),
+    component: () => import(/* webpackChunkName: "user" */ './views/auth'),
     redirect: '/',
     children: [
       {
         path: '/',
         component: () =>
-          import(/* webpackChunkName: "user" */ './views/user/Login')
-      },
-      {
-        path: 'register',
-        component: () =>
-          import(/* webpackChunkName: "user" */ './views/user/Register')
-      },
-      {
-        path: 'forgot-password',
-        component: () =>
-          import(/* webpackChunkName: "user" */ './views/user/ForgotPassword')
-      },
-      {
-        path: 'reset-password',
-        component: () =>
-          import(/* webpackChunkName: "user" */ './views/user/ResetPassword')
+          import(/* webpackChunkName: "user" */ './views/auth/Login')
       }
     ]
   },
