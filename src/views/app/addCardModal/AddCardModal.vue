@@ -76,6 +76,9 @@ export default {
         { label: 'c2', value: 'c2' }
       ],
       newCard: {
+        front: null,
+        back: null,
+        category: null,
         flipped: false
       }
     }
@@ -88,16 +91,22 @@ export default {
     addCard () {
       console.log(this.selected.label)
       this.newCard.category = this.selected.label
+
       db.collection('users')
         .doc(this.currentUser.uid)
         .collection('cards')
         .add(this.newCard)
+
         .then(
           this.$notify('success', 'Congratulations!', 'You Added a New Card')
         )
         .catch(error => {
           console.error(error)
         })
+      this.newCard.front = null
+      this.newCard.back = null
+      this.newCard.category = null
+      this.newCard.category.flipped = false
     }
   }
 }

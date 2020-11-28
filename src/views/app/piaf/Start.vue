@@ -29,7 +29,7 @@
               >Cards</b-button
             >
             <b-button
-              v-b-modal.modallg
+              v-b-modal.modalAddCard
               variant="outline-primary"
               size="lg"
               class="top-left-button-container"
@@ -39,11 +39,14 @@
           <div class=" mb-5 mt-4"></div>
         </b-collapse>
 
-        <b-modal id="modallg" size="lg" title="Add a New Card">
+        <b-modal id="modalAddCard" size="lg" title="Add a New Card">
           <AddCardModal ref="addCardModal" :willUpdateCard="willUpdateCard" />
           <template slot="modal-footer">
             <b-button variant="warning" @click="addCard" class="mr-1"
               >Submit</b-button
+            >
+            <b-button variant="warning" @click="hideAddCard" class="mr-1"
+              >Close</b-button
             >
           </template>
         </b-modal>
@@ -99,15 +102,7 @@ export default {
   data () {
     return {
       showMode: true,
-      cards: [
-        {
-          key: null,
-          front: 'Hello',
-          back: 'Merhaba',
-          category: 'A1',
-          flipped: false
-        }
-      ],
+      cards: [],
       willUpdateCard: null
     }
   },
@@ -121,6 +116,7 @@ export default {
   methods: {
     addCard () {
       this.$refs.addCardModal.addCard()
+      this.$refs['modalAddCard'].hide()
     },
 
     toggleCard (card) {
@@ -135,6 +131,7 @@ export default {
         .doc(this.currentUser.uid)
         .collection('cards')
         .onSnapshot(snapshotChange => {
+          this.cards = []
           snapshotChange.forEach(doc => {
             this.cards.push({
               key: doc.id,
