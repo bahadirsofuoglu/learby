@@ -15,7 +15,22 @@ const data = [
         // roles: [UserRole.Admin, UserRole.Editor],
       }
     ]
+  },
+  {
+    id: 'piaf',
+    icon: 'iconsminds-shop',
+    label: 'menu.piaf',
+    to: `${adminRoot}/piaf`,
+    subs: [
+      {
+        icon: 'simple-icon-paper-plane',
+        label: 'menu.start',
+        to: `${adminRoot}/piaf/start`
+        // roles: [UserRole.Admin, UserRole.Editor],
+      }
+    ]
   }
+
   /* {
   id: "second-menu",
   icon: "iconsminds-chemical",

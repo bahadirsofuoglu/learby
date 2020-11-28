@@ -10,7 +10,7 @@ const routes = [
   {
     path: adminRoot,
     component: () => import(/* webpackChunkName: "app" */ './views/app'),
-    redirect: `${adminRoot}/piaf`,
+    redirect: `${adminRoot}/`,
     meta: { loginRequired: true },
     /*
    define with Authorization :
@@ -26,7 +26,17 @@ const routes = [
           {
             path: '/',
             component: () =>
-              import(/* webpackChunkName: "piaf" */ './views/app/piaf/Start')
+              import(
+                /* webpackChunkName: "piaf" */ './views/app/piaf/FlipCardsIndex.vue'
+              )
+            // meta: { roles: [UserRole.Admin, UserRole.Editor] },
+          },
+          {
+            path: '/question',
+            component: () =>
+              import(
+                /* webpackChunkName: "user" */ './views/app/questionMode/CardsQuestionMode.vue'
+              )
             // meta: { roles: [UserRole.Admin, UserRole.Editor] },
           }
         ]
@@ -64,6 +74,7 @@ const routes = [
       }
     ]
   },
+
   {
     path: '*',
     component: () => import(/* webpackChunkName: "error" */ './views/Error')
