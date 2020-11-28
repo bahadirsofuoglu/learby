@@ -5,30 +5,14 @@ const data = [
   {
     id: 'piaf',
     icon: 'iconsminds-shop',
-    label: 'menu.piaf',
-    to: `${adminRoot}/piaf`,
-    subs: [
-      {
-        icon: 'simple-icon-paper-plane',
-        label: 'menu.start',
-        to: `${adminRoot}/piaf/start`
-        // roles: [UserRole.Admin, UserRole.Editor],
-      }
-    ]
+    label: 'Flip Mode',
+    to: `${adminRoot}/flipMode`
   },
   {
     id: 'piaf',
     icon: 'iconsminds-shop',
-    label: 'menu.piaf',
-    to: `${adminRoot}/piaf`,
-    subs: [
-      {
-        icon: 'simple-icon-paper-plane',
-        label: 'menu.start',
-        to: `${adminRoot}/piaf/start`
-        // roles: [UserRole.Admin, UserRole.Editor],
-      }
-    ]
+    label: 'Question Mode',
+    to: `${adminRoot}/questions`
   }
 
   /* {

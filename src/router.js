@@ -18,13 +18,13 @@ const routes = [
    */
     children: [
       {
-        path: '/app',
+        path: `${adminRoot}`,
         component: () =>
           import(/* webpackChunkName: "piaf" */ './views/app/piaf'),
-        redirect: `${adminRoot}/piaf/start`,
+        redirect: `${adminRoot}/flipMode`,
         children: [
           {
-            path: '/',
+            path: `${adminRoot}/flipMode`,
             component: () =>
               import(
                 /* webpackChunkName: "piaf" */ './views/app/piaf/FlipCardsIndex.vue'
@@ -32,7 +32,7 @@ const routes = [
             // meta: { roles: [UserRole.Admin, UserRole.Editor] },
           },
           {
-            path: '/question',
+            path: `${adminRoot}/questions`,
             component: () =>
               import(
                 /* webpackChunkName: "user" */ './views/app/questionMode/CardsQuestionMode.vue'
@@ -48,12 +48,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "error" */ './views/Error')
   },
   {
-    path: '/user',
+    path: '/',
     component: () => import(/* webpackChunkName: "user" */ './views/user'),
-    redirect: '/user/login',
+    redirect: '/',
     children: [
       {
-        path: 'login',
+        path: '/',
         component: () =>
           import(/* webpackChunkName: "user" */ './views/user/Login')
       },

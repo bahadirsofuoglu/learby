@@ -6,8 +6,8 @@
         class="menu-button d-none d-md-block"
         @click.prevent.stop="
           changeSideMenuStatus({
-            step: menuClickCount + 1,
-            classNames: menuType,
+            step: 1,
+            classNames: 'menu-sub-hidden',
             selectedMenuHasSubItems
           })
         "
@@ -180,7 +180,7 @@ export default {
     },
     logout () {
       this.signOut().then(() => {
-        this.$router.push('/user/login')
+        this.$router.push('/')
       })
     },
 

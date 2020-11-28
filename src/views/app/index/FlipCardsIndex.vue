@@ -87,7 +87,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 import Edit from '../table/Edit.vue'
-import AddCardModal from '../addCardModal/AddCardModal'
+import AddCardModal from '../editCardModals/AddCardModal'
 const db = firebase.firestore()
 
 export default {
