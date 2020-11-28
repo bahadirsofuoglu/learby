@@ -115,7 +115,10 @@ export default {
 
   methods: {
     toggleCard () {
-      this.randomCard.flipped = true
+      this.randomCard.flipped = !this.randomCard.flipped
+      setTimeout(() => {
+        this.randomCard.flipped = !this.randomCard.flipped
+      }, 3000)
     },
 
     getAllCards () {
@@ -126,7 +129,6 @@ export default {
           this.cards = []
           snapshotChange.forEach(doc => {
             this.cards.push({
-              key: doc.id,
               front: doc.data().front,
               back: doc.data().back,
               category: doc.data().category,
@@ -137,15 +139,16 @@ export default {
         })
     },
     async randomQuestion () {
-      this.$notify('dark', 'New Question!', 'We will check your answer')
       this.randomCard = await this.cards[
         Math.floor(Math.random() * this.cards.length)
       ]
+      console.log(this.randomCard.flipped)
+      this.answer = null
 
       console.log(this.cards)
     },
     async answerQuestion (answer) {
-      if (this.randomCard.back == answer) {
+      if (this.randomCard.back === answer) {
         this.$notify(
           'success',
           'Congratulations!',
@@ -157,18 +160,11 @@ export default {
         await this.randomQuestion()
         this.answer = null
       } else {
-        this.$notify(
-          'warning',
-          'Sorry!',
-          'Your Answer is false. Dont worry. You will see this question again'
-        )
-        this.toggleCard()
+        await this.toggleCard()
         setTimeout(async () => {
-          this.randomCard.flipped = false
-        }, 2000)
+          await this.randomQuestion()
+        }, 4000)
 
-        await this.randomQuestion()
-        this.answer = null
         console.log(this.cards)
       }
     }

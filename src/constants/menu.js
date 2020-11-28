@@ -4,14 +4,14 @@ import { UserRole } from '../utils/auth.roles'
 const data = [
   {
     id: 'piaf',
-    icon: 'iconsminds-shop',
+    icon: 'simple-icon-pencil',
     label: 'Flip Mode',
     to: `${adminRoot}/flipMode`
   },
   {
     id: 'piaf',
-    icon: 'iconsminds-shop',
-    label: 'Question Mode',
+    icon: 'simple-icon-question',
+    label: 'Mode',
     to: `${adminRoot}/questions`
   }
 
