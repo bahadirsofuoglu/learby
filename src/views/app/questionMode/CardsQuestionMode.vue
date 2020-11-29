@@ -47,8 +47,7 @@
       </b-row>
       <b-row v-if="cardsLengthControl == true">
         <b-colxx xxs="3" md="5"></b-colxx>
-        <b-colxx xxs="4" md="4"
-          >flipCard
+        <b-colxx xxs="4" md="4">
           <div class="float-left">
             <transition name="flip">
               <p
@@ -65,7 +64,7 @@
                   style="min-width: 50px"
                   class=" mt-3 float-left"
                   @click="toggleLastCard(lastCard)"
-                  >Congrats
+                  >Flip
                 </b-button>
               </b-colxx>
               <b-colxx xxs="4" md="4"> </b-colxx>
