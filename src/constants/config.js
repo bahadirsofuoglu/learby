@@ -18,14 +18,14 @@ export const localeOptions = [
 ]
 
 export const firebaseConfig = {
-  apiKey: 'AIzaSyDPWDGgnUCR68fwItdv5oPpZdh4Hbn4Xio',
-  authDomain: 'learby-ac951.firebaseapp.com',
-  databaseURL: 'https://learby-ac951.firebaseio.com',
-  projectId: 'learby-ac951',
-  storageBucket: 'learby-ac951.appspot.com',
-  messagingSenderId: '250821348575',
-  appId: '1:250821348575:web:5a1b288de5ffe211582d6a',
-  measurementId: 'G-T8N4PKG8QN'
+  apiKey: process.env.VUE_APP_APIKEY,
+  authDomain: process.env.VUE_APP_AUTHDOMAIN,
+  databaseURL: process.env.VUE_APP_DATABASEURL,
+  projectId: process.env.VUE_APP_PROJECTID,
+  storageBucket: process.env.VUE_APP_STORAGEBUCKET,
+  messagingSenderId: process.env.VUE_APP_MESSAGINGSENDERID,
+  appId: process.env.VUE_APP_APPID,
+  measurementId: process.env.VUE_APP_MEASUREMENTID
 }
 
 export const currentUser = {}

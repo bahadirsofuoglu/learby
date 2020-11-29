@@ -150,17 +150,15 @@ export default {
       this.randomCard = await this.cards[
         Math.floor(Math.random() * this.cards.length)
       ]
-      console.log(this.randomCard.flipped)
-      this.answer = null
 
-      console.log(this.cards)
+      this.answer = null
     },
     async answerQuestion (answer) {
       if (this.randomCard.back === answer) {
         this.$notify('success', 'Congratulations!', 'Your Answer is true. ')
 
         this.cards = await this.cards.filter(x => x !== this.randomCard)
-        console.log(this.cards)
+
         await this.randomQuestion()
         this.answer = null
       } else {
@@ -169,8 +167,6 @@ export default {
         setTimeout(async () => {
           await this.randomQuestion()
         }, 4000)
-
-        console.log(this.cards)
       }
     }
   }

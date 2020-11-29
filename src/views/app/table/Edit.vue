@@ -101,9 +101,6 @@ export default {
   },
   methods: {
     onDelete (row) {
-      console.log('hello')
-      console.log(row)
-      console.log(this.currentUser.uid)
       db.collection('users')
         .doc(this.currentUser.uid)
         .collection('cards')
@@ -119,7 +116,6 @@ export default {
     },
     onEdit (row) {
       this.willUpdateCard = row.rowData
-      console.log(this.updateCard)
     }
   }
 }
