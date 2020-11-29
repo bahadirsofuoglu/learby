@@ -1,3 +1,5 @@
+![](gs://learby-ac951.appspot.com/logo.png)
+
 # Learby
 Learby is an application I made to improve my English vocabulary and do something with firebase. It stores your words with the firestore and lets you learn these words with rotating cards. It allows you to update your words with the table. It also asks you the Turkish meanings of your words with quiz mode. (Turkish or the language you want)
 
