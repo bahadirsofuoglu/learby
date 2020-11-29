@@ -21,21 +21,6 @@
       >
         <mobile-menu-icon />
       </a>
-      <div
-        :class="{ search: true, 'mobile-view': isMobileSearch }"
-        ref="searchContainer"
-        @mouseenter="isSearchOver = true"
-        @mouseleave="isSearchOver = false"
-      >
-        <b-input
-          :placeholder="$t('menu.search')"
-          @keypress.native.enter="search"
-          v-model="searchKeyword"
-        />
-        <span class="search-icon" @click="searchClick">
-          <i class="simple-icon-magnifier"></i>
-        </span>
-      </div>
     </div>
 
     <div class="navbar-right">
