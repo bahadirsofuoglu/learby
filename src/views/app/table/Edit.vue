@@ -62,33 +62,26 @@ export default {
       fields: [
         {
           name: 'front',
-          sortField: 'front',
-          title: 'English',
+
+          title: 'Front',
           titleClass: 'back',
           dataClass: 'list-item-heading',
           width: '30%'
         },
         {
           name: 'back',
-          sortField: 'back',
-          title: 'Turkish',
+
+          title: 'Back',
           titleClass: '',
           dataClass: 'list-item-heading',
           width: '30%'
         },
-        {
-          name: 'category',
-          sortField: 'category',
-          title: 'category',
-          titleClass: '',
-          dataClass: 'list-item-heading',
-          width: '20%'
-        },
+
         {
           name: '__slot:actions',
           title: 'Actions',
           titleClass: '',
-          dataClass: 'list-item-heading',
+          dataClass: 'list-item-actions',
           width: '20%'
         }
       ],

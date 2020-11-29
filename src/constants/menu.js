@@ -11,7 +11,7 @@ const data = [
   {
     id: 'piaf',
     icon: 'simple-icon-question',
-    label: 'Mode',
+    label: 'Quiz Mode',
     to: `${adminRoot}/questions`
   }
 

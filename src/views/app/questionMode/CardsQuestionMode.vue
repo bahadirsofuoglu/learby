@@ -31,13 +31,13 @@
                     @keyup.enter="answerQuestion(answer)"
                   />
                   <span>Answer</span>
-                  <!--  <b-button
+                  <b-button
                     variant="warning"
                     style="min-width: 50px"
                     class=" mt-3 float-left"
                     @click="answerQuestion(answer)"
                     >Check</b-button
-                  > -->
+                  >
                 </label>
               </b-colxx>
               <b-colxx xxs="4" md="4"> </b-colxx>

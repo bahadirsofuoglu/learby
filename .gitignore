@@ -21,3 +21,6 @@ yarn-error.log*
 *.sw*
 .history
 .env
+firebase.json
+.firebase/hosting.ZGlzdA.cache
+.firebaserc
