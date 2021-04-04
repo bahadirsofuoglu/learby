@@ -2,6 +2,15 @@
   <div>
     <b-row>
       <b-colxx xxs="12">
+        <label class="form-group has-float-label ">
+          <v-select
+            label="name"
+            :options="categories"
+            v-model="selectedCategory"
+          />
+          <span>Select Category</span>
+        </label>
+
         <b-button
           v-b-toggle.collapse1
           variant="outline-secondary"
@@ -9,6 +18,7 @@
           class="mb-5"
           >Edit Menu</b-button
         >
+
         <b-collapse id="collapse1">
           <b-card>
             <b-button
@@ -126,6 +136,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 import Edit from '../table/Edit.vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 import AddCardModal from '../editScreens/AddCardModal'
 import AddCategoryModal from '../editScreens/AddCategoryModal'
 const db = firebase.firestore()
@@ -134,19 +146,23 @@ export default {
   components: {
     Edit,
     AddCardModal,
-    AddCategoryModal
+    AddCategoryModal,
+    vSelect
   },
 
   data () {
     return {
       showMode: true,
       cards: [],
+      categories: [{ name: 'All' }],
+      selectedCategory: null,
       willUpdateCard: null
     }
   },
 
-  created () {
-    this.get()
+  async mounted () {
+    await this.getCards()
+    await this.getCategories()
   },
   computed: {
     ...mapGetters(['currentUser', 'processing', 'loginError'])
@@ -165,7 +181,7 @@ export default {
     showModeChange () {
       this.showMode = !this.showMode
     },
-    get () {
+    getCards () {
       db.collection('users')
         .doc(this.currentUser.uid)
         .collection('cards')
@@ -181,11 +197,25 @@ export default {
             })
           })
         })
+    },
+    getCategories () {
+      db.collection('users')
+        .doc(this.currentUser.uid)
+        .collection('categories')
+        .onSnapshot(snapshotChange => {
+          snapshotChange.forEach(doc => {
+            this.categories.push({
+              key: doc.id,
+              name: doc.data().name
+            })
+          })
+          console.log(this.categories)
+        })
     }
   }
 }
 </script>
-<style scoped>
+<style>
 ul {
   padding-left: 0;
   display: flex;
@@ -285,5 +315,9 @@ label {
   font-weight: 400;
   color: #333;
   margin-right: 10px;
+}
+
+.v-select {
+  width: 250px;
 }
 </style>

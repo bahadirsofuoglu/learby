@@ -5,7 +5,11 @@
         <b-card>
           <b-form>
             <label class="form-group has-float-label">
-              <v-select :options="answers" />
+              <v-select
+                label="name"
+                :options="categories"
+                v-model="newCard.categoryName"
+              />
               <span>Select Category</span>
             </label>
             <label class="form-group has-float-label">
@@ -69,20 +73,19 @@ export default {
       newCard: {
         front: null,
         back: null,
-
+        categoryName: null,
         flipped: false
       },
-      answers: [
-        { label: 'Single Select', value: 1, options: true },
-        { label: 'Single asdf', value: 2, options: true }
-      ],
+      categories: [],
       forms: [{ label: 'Verb', value: 1, options: true }]
     }
   },
   computed: {
     ...mapGetters(['currentUser'])
   },
-
+  async mounted () {
+    await this.getCategories()
+  },
   methods: {
     addCard () {
       db.collection('users')
@@ -99,6 +102,20 @@ export default {
       this.newCard.back = null
 
       this.newCard.flipped = false
+    },
+    getCategories () {
+      db.collection('users')
+        .doc(this.currentUser.uid)
+        .collection('categories')
+        .onSnapshot(snapshotChange => {
+          snapshotChange.forEach(doc => {
+            this.categories.push({
+              key: doc.id,
+              name: doc.data().name
+            })
+          })
+          console.log(this.categories)
+        })
     }
   }
 }
@@ -196,7 +213,7 @@ li:nth-child(-7n + 7) .flipCard {
   opacity: 0;
 }
 
-.vs--searchable .vs__dropdown-toggle {
-  width: 98%;
+.v-select {
+  width: 100%;
 }
 </style>
