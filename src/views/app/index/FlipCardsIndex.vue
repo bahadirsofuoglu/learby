@@ -32,8 +32,15 @@
               v-b-modal.modalAddCard
               variant="outline-primary"
               size="lg"
-              class="top-left-button-container"
+              class="top-left-button-container ml-3"
               >Add Card</b-button
+            >
+            <b-button
+              v-b-modal.modalAddCategory
+              variant="outline-warning"
+              size="lg"
+              class="top-left-button-container ml-3"
+              >Add Category</b-button
             >
           </b-card>
           <div class=" mb-5 mt-4"></div>
@@ -53,6 +60,25 @@
             <b-button
               variant="primary"
               @click="() => this.$refs.modalAddCard.hide()"
+              class="mr-1"
+              >Cancel</b-button
+            >
+          </template>
+        </b-modal>
+        <b-modal
+          id="modalAddCategory"
+          ref="modalAddCategory"
+          size="lg"
+          title="Add New Category"
+        >
+          <AddCategoryModal ref="addCategoryModal" />
+          <template slot="modal-footer">
+            <b-button variant="warning" @click="addCategory" class="mr-1"
+              >Submit</b-button
+            >
+            <b-button
+              variant="primary"
+              @click="() => this.$refs.modalAddCategory.hide()"
               class="mr-1"
               >Cancel</b-button
             >
@@ -98,13 +124,15 @@
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 import Edit from '../table/Edit.vue'
-import AddCardModal from '../editCardModals/AddCardModal'
+import AddCardModal from '../editScreens/AddCardModal'
+import AddCategoryModal from '../editScreens/AddCategoryModal'
 const db = firebase.firestore()
 
 export default {
   components: {
     Edit,
-    AddCardModal
+    AddCardModal,
+    AddCategoryModal
   },
 
   data () {

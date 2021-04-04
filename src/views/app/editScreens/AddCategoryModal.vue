@@ -4,10 +4,6 @@
       <b-col md="8" sm="12">
         <b-card>
           <b-form>
-            <label class="form-group has-float-label">
-              <v-select :options="answers" />
-              <span>SelectCategory</span>
-            </label>
             <label class="form-group has-float-label mt-2">
               <input
                 type="text"
@@ -15,11 +11,7 @@
                 required
                 v-model="newCard.front"
               />
-              <span>Front</span>
-            </label>
-            <label class="form-group has-float-label">
-              <input type="text" class="form-control" v-model="newCard.back" />
-              <span>Back</span>
+              <span>Add Category Name</span>
             </label>
           </b-form>
         </b-card>
@@ -33,11 +25,14 @@
                   newCard.flipped = !newCard.flipped
                 }
               "
+              class="listed-card"
             >
               <transition name="flip">
-                <p :key="newCard.flipped" class="modalFlipCard">
-                  {{ newCard.flipped ? newCard.back : newCard.front }}
-                </p>
+                <div class="modalFlipCard">
+                  <p :key="newCard.flipped" class="card-text">
+                    {{ newCard.flipped ? newCard.back : newCard.front }}
+                  </p>
+                </div>
               </transition>
             </li>
           </ul>
@@ -109,7 +104,8 @@ li {
 }
 
 .modalFlipCard {
-  display: block;
+  display: flex;
+  flex-flow: row wrap;
   width: 150px;
   height: 175px;
   padding: 80px 50px;
@@ -128,7 +124,12 @@ li {
   box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   will-change: transform;
 }
-
+.card-text {
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: left;
+}
 li:hover {
   transform: scale(1.1);
 }
