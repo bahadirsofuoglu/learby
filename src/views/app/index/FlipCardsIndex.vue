@@ -39,11 +39,22 @@
           <div class=" mb-5 mt-4"></div>
         </b-collapse>
 
-        <b-modal id="modalAddCard" size="lg" title="Add a New Card">
+        <b-modal
+          id="modalAddCard"
+          ref="modalAddCard"
+          size="lg"
+          title="Add a New Card"
+        >
           <AddCardModal ref="addCardModal" :willUpdateCard="willUpdateCard" />
           <template slot="modal-footer">
             <b-button variant="warning" @click="addCard" class="mr-1"
               >Submit</b-button
+            >
+            <b-button
+              variant="primary"
+              @click="() => this.$refs.modalAddCard.hide()"
+              class="mr-1"
+              >Cancel</b-button
             >
           </template>
         </b-modal>

@@ -5,6 +5,10 @@
         <b-card>
           <b-form>
             <label class="form-group has-float-label">
+              <v-select :options="answers" />
+              <span>SelectCategory</span>
+            </label>
+            <label class="form-group has-float-label mt-2">
               <input
                 type="text"
                 class="form-control"
@@ -44,10 +48,15 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 import firebase from 'firebase'
+
 const db = firebase.firestore()
 export default {
+  components: {
+    'v-select': vSelect
+  },
   data () {
     return {
       newCard: {
@@ -55,7 +64,11 @@ export default {
         back: null,
 
         flipped: false
-      }
+      },
+      answers: [
+        { label: 'Single Select', value: 1, options: true },
+        { label: 'Single asdf', value: 2, options: true }
+      ]
     }
   },
   computed: {
@@ -68,7 +81,6 @@ export default {
         .doc(this.currentUser.uid)
         .collection('cards')
         .add(this.newCard)
-
         .then(
           this.$notify('success', 'Congratulations!', 'You Added a New Card')
         )
@@ -174,14 +186,7 @@ li:nth-child(-7n + 7) .flipCard {
   opacity: 0;
 }
 
-/* Form */
-
-label {
-  font-weight: 400;
-  color: #333;
-  margin-right: 10px;
-}
-#select {
+.vs--searchable .vs__dropdown-toggle {
   width: 98%;
 }
 </style>
