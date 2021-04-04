@@ -15,7 +15,7 @@
               v-if="showMode == true"
               size="lg"
               variant="outline-success"
-              class="top-left-button-container"
+              class="top-left-button-container ml-3 mt-3"
               @click="showModeChange"
               >Table</b-button
             >
@@ -24,7 +24,7 @@
               v-if="showMode == false"
               size="lg"
               variant="outline-warning"
-              class="top-left-button-container"
+              class="top-left-button-container ml-3 mt-3"
               @click="showModeChange"
               >Cards</b-button
             >
@@ -32,14 +32,14 @@
               v-b-modal.modalAddCard
               variant="outline-primary"
               size="lg"
-              class="top-left-button-container ml-3"
+              class="top-left-button-container ml-3 mt-3"
               >Add Card</b-button
             >
             <b-button
               v-b-modal.modalAddCategory
               variant="outline-warning"
               size="lg"
-              class="top-left-button-container ml-3"
+              class="top-left-button-container ml-3 mt-3"
               >Add Category</b-button
             >
           </b-card>
@@ -97,14 +97,16 @@
                 :key="card.front"
               >
                 <transition name="flip">
-                  <p v-bind:key="card.flipped" class="flipCard ml-5">
-                    {{ card.flipped ? card.back : card.front }}
-                    <span
-                      v-on:click="cards.splice(index, 1)"
-                      class="delete-card"
-                      >X</span
-                    >
-                  </p>
+                  <div class="flipCard ml-5">
+                    <p v-bind:key="card.flipped" class="text-card">
+                      {{ card.flipped ? card.back : card.front }}
+                      <span
+                        v-on:click="cards.splice(index, 1)"
+                        class="delete-card"
+                        >X</span
+                      >
+                    </p>
+                  </div>
                 </transition>
               </li>
             </ul>
@@ -153,7 +155,9 @@ export default {
     addCard () {
       this.$refs.addCardModal.addCard()
     },
-
+    addCategory () {
+      this.$refs.addCategoryModal.addCategory()
+    },
     toggleCard (card) {
       card.flipped = !card.flipped
     },
@@ -206,15 +210,18 @@ li {
   line-height: 27px;
   cursor: pointer;
   position: relative;
-  color: #fff;
-  font-weight: 600;
-  font-size: 20px;
   -webkit-box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   -moz-box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   will-change: transform;
 }
-
+.text-card {
+  display: block;
+  color: #fff;
+  text-align: inherit;
+  font-weight: 600;
+  font-size: 15px;
+}
 li:hover {
   transform: scale(1.1);
 }

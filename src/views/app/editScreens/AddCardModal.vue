@@ -6,7 +6,11 @@
           <b-form>
             <label class="form-group has-float-label">
               <v-select :options="answers" />
-              <span>SelectCategory</span>
+              <span>Select Category</span>
+            </label>
+            <label class="form-group has-float-label">
+              <v-select :options="forms" />
+              <span>Select Forms</span>
             </label>
             <label class="form-group has-float-label mt-2">
               <input
@@ -36,6 +40,7 @@
             >
               <transition name="flip">
                 <div class="modalFlipCard">
+                  <span class="form-card">Verb</span>
                   <p :key="newCard.flipped" class="text-card">
                     {{ newCard.flipped ? newCard.back : newCard.front }}
                   </p>
@@ -70,7 +75,8 @@ export default {
       answers: [
         { label: 'Single Select', value: 1, options: true },
         { label: 'Single asdf', value: 2, options: true }
-      ]
+      ],
+      forms: [{ label: 'Verb', value: 1, options: true }]
     }
   },
   computed: {
@@ -112,6 +118,7 @@ li {
 
 .modalFlipCard {
   display: block;
+  position: relative;
   width: 150px;
   height: 175px;
   padding: 80px 50px;
@@ -121,17 +128,16 @@ li {
   text-align: center;
   line-height: 27px;
   cursor: pointer;
-  position: absolute;
   color: #fff;
-  font-weight: 600;
-  font-size: 20px;
   -webkit-box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   -moz-box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   will-change: transform;
 }
 .text-card {
-  position: relative;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
 }
 li:hover {
   transform: scale(1.1);
@@ -161,16 +167,16 @@ li:nth-child(-7n + 7) .flipCard {
   background-color: #e46055;
 }
 
-.delete-card {
+.form-card {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 0;
   padding: 10px 15px;
-  opacity: 0.4;
+  opacity: 0.8;
   transition: all 0.5s ease;
 }
 
-.delete-card:hover,
+.form-card:hover,
 .error {
   opacity: 1;
   transform: rotate(360deg);

@@ -9,7 +9,7 @@
                 type="text"
                 class="form-control"
                 required
-                v-model="newCard.front"
+                v-model="categories.name"
               />
               <span>Add Category Name</span>
             </label>
@@ -19,18 +19,11 @@
       <b-col>
         <div class="mt-3">
           <ul class="flashcard-list">
-            <li
-              @click="
-                () => {
-                  newCard.flipped = !newCard.flipped
-                }
-              "
-              class="listed-card"
-            >
+            <li class="listed-card">
               <transition name="flip">
                 <div class="modalFlipCard">
-                  <p :key="newCard.flipped" class="card-text">
-                    {{ newCard.flipped ? newCard.back : newCard.front }}
+                  <p class="card-text">
+                    {{ categories.name }}
                   </p>
                 </div>
               </transition>
@@ -54,16 +47,9 @@ export default {
   },
   data () {
     return {
-      newCard: {
-        front: null,
-        back: null,
-
-        flipped: false
-      },
-      answers: [
-        { label: 'Single Select', value: 1, options: true },
-        { label: 'Single asdf', value: 2, options: true }
-      ]
+      categories: {
+        name: ''
+      }
     }
   },
   computed: {
@@ -71,21 +57,22 @@ export default {
   },
 
   methods: {
-    addCard () {
+    addCategory () {
       db.collection('users')
         .doc(this.currentUser.uid)
-        .collection('cards')
-        .add(this.newCard)
+        .collection('categories')
+        .add(this.categories)
         .then(
-          this.$notify('success', 'Congratulations!', 'You Added a New Card')
+          this.$notify(
+            'success',
+            'Congratulations!',
+            'You Added a New Category'
+          )
         )
         .catch(error => {
           console.error(error)
         })
-      this.newCard.front = null
-      this.newCard.back = null
-
-      this.newCard.flipped = false
+      this.categoryName = ''
     }
   }
 }
