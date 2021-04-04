@@ -109,6 +109,7 @@
                 <transition name="flip">
                   <div class="flipCard ml-5">
                     <p v-bind:key="card.flipped" class="text-card">
+                      <span class="form-card">{{ card.formName }}</span>
                       {{ card.flipped ? card.back : card.front }}
                       <span
                         v-on:click="cards.splice(index, 1)"
@@ -167,6 +168,13 @@ export default {
   computed: {
     ...mapGetters(['currentUser', 'processing', 'loginError'])
   },
+  watch: {
+    'selectedCategory.name': async function (value) {
+      value === 'All'
+        ? await this.getCards()
+        : await this.getFilteredCards(value)
+    }
+  },
   methods: {
     addCard () {
       this.$refs.addCardModal.addCard()
@@ -192,6 +200,24 @@ export default {
               key: doc.id,
               front: doc.data().front,
               back: doc.data().back,
+              formName: doc.data().formName.name,
+              flipped: doc.data().flipped
+            })
+          })
+        })
+    },
+    getFilteredCards (param) {
+      db.collection('users')
+        .doc(this.currentUser.uid)
+        .collection('cards')
+        .where('categoryName.name', '==', param)
+        .onSnapshot(snapshotChange => {
+          this.cards = []
+          snapshotChange.forEach(doc => {
+            this.cards.push({
+              key: doc.id,
+              front: doc.data().front,
+              back: doc.data().back,
 
               flipped: doc.data().flipped
             })
@@ -209,7 +235,6 @@ export default {
               name: doc.data().name
             })
           })
-          console.log(this.categories)
         })
     }
   }
@@ -308,7 +333,16 @@ li:nth-child(-7n + 7) .flipCard {
   transform: rotateY(180deg);
   opacity: 0;
 }
+.form-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 10px 15px;
+  opacity: 0.8;
+  transition: all 0.5s ease;
+}
 
+.form-card:hover,
 /* Form */
 
 label {

@@ -13,7 +13,11 @@
               <span>Select Category</span>
             </label>
             <label class="form-group has-float-label">
-              <v-select :options="forms" />
+              <v-select
+                label="name"
+                :options="forms"
+                v-model="newCard.formName"
+              />
               <span>Select Forms</span>
             </label>
             <label class="form-group has-float-label mt-2">
@@ -73,11 +77,12 @@ export default {
       newCard: {
         front: null,
         back: null,
-        categoryName: null,
+        category: null,
+        form: null,
         flipped: false
       },
       categories: [],
-      forms: [{ label: 'Verb', value: 1, options: true }]
+      forms: [{ name: 'verb' }]
     }
   },
   computed: {
@@ -114,7 +119,6 @@ export default {
               name: doc.data().name
             })
           })
-          console.log(this.categories)
         })
     }
   }
