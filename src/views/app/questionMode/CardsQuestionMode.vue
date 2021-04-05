@@ -5,12 +5,13 @@
       <br />
       <br />
       <br />
-      <b-row v-if="cardsLengthControl == false">
+      <b-row v-if="!cardsLengthControl">
         <b-colxx xxs="1" md="5"></b-colxx>
         <b-colxx xxs="4" md="4">
           <div class="float-left">
             <transition name="flip">
               <p
+                v-if="randomCard"
                 v-bind:key="randomCard.flipped"
                 :class="randomCard.flipped ? 'backflipCard' : 'flipCard'"
               >
@@ -45,7 +46,7 @@
           </div>
         </b-colxx>
       </b-row>
-      <b-row v-if="cardsLengthControl == true">
+      <b-row v-if="cardsLengthControl">
         <b-colxx xxs="3" md="5"></b-colxx>
         <b-colxx xxs="4" md="4">
           <div class="float-left">
@@ -63,7 +64,7 @@
                   variant="warning"
                   style="min-width: 50px"
                   class=" mt-3 float-left"
-                  @click="toggleLastCard(lastCard)"
+                  @click="toggleLastCard"
                   >Flip
                 </b-button>
               </b-colxx>
@@ -76,7 +77,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import firebase from 'firebase'
 import Edit from '../table/Edit.vue'
 import AddCardModal from '../editScreens/AddCardModal'
@@ -96,24 +97,23 @@ export default {
       answer: null,
       cardsLengthControl: false,
       lastCard: {
-        front: 'Add card for trying',
-        back: 'Denemek için kelime ekle!',
+        front: 'You should add new cards',
+        back: 'Denemek için kelimeler ekle!',
         flipped: false
       }
     }
   },
 
-  created () {
-    this.getAllCards()
+  async created () {
+    await this.getAllCards()
   },
   computed: {
-    ...mapGetters(['currentUser', 'processing', 'loginError'])
+    ...mapGetters(['currentUser'])
   },
   watch: {
     cards: function () {
       if (this.cards.length === 0) {
         this.cardsLengthControl = true
-        this.randomCard = this.lastCard
       }
     }
   },
@@ -125,8 +125,8 @@ export default {
         this.randomCard.flipped = !this.randomCard.flipped
       }, 3000)
     },
-    toggleLastCard (randomCard) {
-      randomCard.flipped = !randomCard.flipped
+    toggleLastCard () {
+      this.lastCard.flipped = !this.lastCard.flipped
     },
     getAllCards () {
       db.collection('users')
@@ -138,7 +138,8 @@ export default {
             this.cards.push({
               front: doc.data().front,
               back: doc.data().back,
-
+              category: doc.data().category,
+              form: doc.data().form,
               flipped: doc.data().flipped
             })
           })

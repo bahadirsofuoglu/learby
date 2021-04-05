@@ -8,16 +8,12 @@
               <v-select
                 label="name"
                 :options="categories"
-                v-model="newCard.categoryName"
+                v-model="selectedCategory"
               />
               <span>Select Category</span>
             </label>
             <label class="form-group has-float-label">
-              <v-select
-                label="name"
-                :options="forms"
-                v-model="newCard.formName"
-              />
+              <v-select label="name" :options="forms" v-model="selectedForm" />
               <span>Select Forms</span>
             </label>
             <label class="form-group has-float-label mt-2">
@@ -75,13 +71,8 @@ export default {
   data () {
     return {
       newCard: {
-        front: null,
-        back: null,
-        category: null,
-        form: null,
         flipped: false
       },
-      categories: [],
       forms: [
         { name: 'adjective' },
         { name: 'adverb' },
@@ -89,7 +80,10 @@ export default {
         { name: 'noun' },
         { name: 'pronoun' },
         { name: 'conjunction' }
-      ]
+      ],
+      categories: [],
+      selectedCategory: {},
+      selectedForm: {}
     }
   },
   computed: {
@@ -100,6 +94,8 @@ export default {
   },
   methods: {
     addCard () {
+      this.newCard.category = this.selectedCategory.name
+      this.newCard.form = this.selectedForm.name
       db.collection('users')
         .doc(this.currentUser.uid)
         .collection('cards')
@@ -163,7 +159,9 @@ li {
   will-change: transform;
 }
 .text-card {
-  text-align: center;
+  display: block;
+  color: #fff;
+  text-align: inherit;
   font-weight: 600;
   font-size: 15px;
 }

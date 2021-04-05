@@ -62,7 +62,7 @@
           size="lg"
           title="Add a New Card"
         >
-          <AddCardModal ref="addCardModal" :willUpdateCard="willUpdateCard" />
+          <AddCardModal ref="addCardModal" />
           <template slot="modal-footer">
             <b-button variant="warning" @click="addCard" class="mr-1"
               >Submit</b-button
@@ -106,7 +106,7 @@
                 <transition name="flip">
                   <div class="flipCard ml-5">
                     <p v-bind:key="card.flipped" class="text-card">
-                      <span class="form-card">{{ card.formName }}</span>
+                      <span class="form-card">{{ card.form }}</span>
                       {{ card.flipped ? card.back : card.front }}
                       <span
                         v-on:click="cards.splice(index, 1)"
@@ -153,8 +153,7 @@ export default {
       showMode: true,
       cards: [],
       categories: [{ name: 'All' }],
-      selectedCategory: null,
-      willUpdateCard: null
+      selectedCategory: null
     }
   },
 
@@ -167,7 +166,7 @@ export default {
   },
   watch: {
     'selectedCategory.name': async function (value) {
-      value === 'All'
+      value === 'all'
         ? await this.getCards()
         : await this.getFilteredCards(value)
     }
@@ -198,7 +197,8 @@ export default {
               key: doc.id,
               front: doc.data().front,
               back: doc.data().back,
-              formName: doc.data().formName.name,
+              category: doc.data().category,
+              form: doc.data().form,
               flipped: doc.data().flipped
             })
           })
@@ -208,7 +208,7 @@ export default {
       db.collection('users')
         .doc(this.currentUser.uid)
         .collection('cards')
-        .where('categoryName.name', '==', param)
+        .where('category', '==', param)
         .onSnapshot(snapshotChange => {
           this.cards = []
           snapshotChange.forEach(doc => {
@@ -216,7 +216,8 @@ export default {
               key: doc.id,
               front: doc.data().front,
               back: doc.data().back,
-
+              category: doc.data().category,
+              form: doc.data().form,
               flipped: doc.data().flipped
             })
           })

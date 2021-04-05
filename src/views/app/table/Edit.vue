@@ -32,9 +32,9 @@
       </template>
     </vuetable>
     <b-modal id="forEdit" size="lg" title="Update Card">
-      <UpdateCardModal ref="updateCardModal" :willUpdateCard="willUpdateCard" />
+      <UpdateCardModal ref="updateCardModal" :updateCard="updateCard" />
       <template slot="modal-footer">
-        <b-button variant="warning" @click="updateCard" class="mr-1"
+        <b-button variant="warning" @click="onClickUpdateCard" class="mr-1"
           >Update</b-button
         >
       </template>
@@ -85,7 +85,7 @@ export default {
           width: '20%'
         }
       ],
-      willUpdateCard: null
+      updateCard: {}
     }
   },
   created () {},
@@ -104,11 +104,11 @@ export default {
           console.error(error)
         })
     },
-    updateCard () {
+    onClickUpdateCard () {
       this.$refs.updateCardModal.updateCardMethod()
     },
     onEdit (row) {
-      this.willUpdateCard = row.rowData
+      this.updateCard = row.rowData
     }
   }
 }

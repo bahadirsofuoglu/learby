@@ -5,6 +5,22 @@
         <b-card>
           <b-form>
             <label class="form-group has-float-label">
+              <v-select
+                label="name"
+                :options="categories"
+                v-model="updateCard.category"
+              />
+              <span>Select Category</span>
+            </label>
+            <label class="form-group has-float-label">
+              <v-select
+                label="name"
+                :options="forms"
+                v-model="updateCard.form"
+              />
+              <span>Select Forms</span>
+            </label>
+            <label class="form-group has-float-label">
               <input
                 type="text"
                 class="form-control"
@@ -35,9 +51,14 @@
               "
             >
               <transition name="flip">
-                <p :key="updateCard.flipped" class="modalFlipCard">
-                  {{ updateCard.flipped ? updateCard.back : updateCard.front }}
-                </p>
+                <div class="modalFlipCard">
+                  <span class="form-card">Verb</span>
+                  <p :key="updateCard.flipped" class="text-card">
+                    {{
+                      updateCard.flipped ? updateCard.back : updateCard.front
+                    }}
+                  </p>
+                </div>
               </transition>
             </li>
           </ul>
@@ -50,7 +71,6 @@
 import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
-import { getDirection } from '../../../utils'
 import firebase from 'firebase'
 const db = firebase.firestore()
 export default {
@@ -58,21 +78,24 @@ export default {
     'v-select': vSelect
   },
   props: {
-    willUpdateCard: {
-      type: null
+    updateCard: {
+      type: Object
     }
   },
   data () {
     return {
-      direction: getDirection().direction,
-
-      updateCard: this.willUpdateCard
+      categories: [],
+      forms: ['adjective', 'adverb', 'verb', 'noun', 'pronoun', 'conjunction'],
+      selectedCategory: {},
+      selectedForm: {}
     }
   },
   computed: {
     ...mapGetters(['currentUser'])
   },
-
+  async mounted () {
+    await this.getCategories()
+  },
   methods: {
     updateCardMethod () {
       db.collection('users')
@@ -83,6 +106,16 @@ export default {
         .then(this.$notify('success', 'Congratulations!', 'You Update a Card'))
         .catch(error => {
           console.error(error)
+        })
+    },
+    getCategories () {
+      db.collection('users')
+        .doc(this.currentUser.uid)
+        .collection('categories')
+        .onSnapshot(snapshotChange => {
+          snapshotChange.forEach(doc => {
+            this.categories.push(`${doc.data().name}`)
+          })
         })
     }
   }
@@ -103,6 +136,7 @@ li {
 
 .modalFlipCard {
   display: block;
+  position: relative;
   width: 150px;
   height: 175px;
   padding: 80px 50px;
@@ -112,16 +146,19 @@ li {
   text-align: center;
   line-height: 27px;
   cursor: pointer;
-  position: relative;
   color: #fff;
-  font-weight: 600;
-  font-size: 20px;
   -webkit-box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   -moz-box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   will-change: transform;
 }
-
+.text-card {
+  display: block;
+  color: #fff;
+  text-align: inherit;
+  font-weight: 600;
+  font-size: 15px;
+}
 li:hover {
   transform: scale(1.1);
 }
@@ -150,16 +187,16 @@ li:nth-child(-7n + 7) .flipCard {
   background-color: #e46055;
 }
 
-.delete-card {
+.form-card {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 0;
   padding: 10px 15px;
-  opacity: 0.4;
+  opacity: 0.8;
   transition: all 0.5s ease;
 }
 
-.delete-card:hover,
+.form-card:hover,
 .error {
   opacity: 1;
   transform: rotate(360deg);
@@ -179,14 +216,7 @@ li:nth-child(-7n + 7) .flipCard {
   opacity: 0;
 }
 
-/* Form */
-
-label {
-  font-weight: 400;
-  color: #333;
-  margin-right: 10px;
-}
-#select {
-  width: 98%;
+.v-select {
+  width: 100%;
 }
 </style>
