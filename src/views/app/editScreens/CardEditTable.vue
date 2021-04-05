@@ -65,16 +65,29 @@ export default {
           title: 'Front',
           titleClass: 'back',
           dataClass: 'list-item-heading',
-          width: '30%'
+          width: '25%'
         },
         {
           name: 'back',
           title: 'Back',
           titleClass: '',
           dataClass: 'list-item-heading',
-          width: '30%'
+          width: '25%'
         },
-
+        {
+          name: 'category',
+          title: 'Category',
+          titleClass: '',
+          dataClass: 'list-item-heading',
+          width: '20%'
+        },
+        {
+          name: 'form',
+          title: 'Form',
+          titleClass: '',
+          dataClass: 'list-item-heading',
+          width: '20%'
+        },
         {
           name: '__slot:actions',
           title: 'Actions',
