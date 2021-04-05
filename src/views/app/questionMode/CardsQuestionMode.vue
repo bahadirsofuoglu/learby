@@ -17,7 +17,7 @@
           <br />
           <br />
           <br />
-          <b-row v-if="!cardsLengthControl">
+          <b-row>
             <b-colxx xxs="1" md="5"></b-colxx>
             <b-colxx xxs="4" md="4">
               <div class="float-left">
@@ -60,7 +60,7 @@
               </div>
             </b-colxx>
           </b-row>
-          <b-row v-if="cardsLengthControl">
+          <!--       <b-row v-if="cardsLengthControl">
             <b-colxx xxs="3" md="5"></b-colxx>
             <b-colxx xxs="4" md="4">
               <div class="float-left">
@@ -86,7 +86,7 @@
                 </b-row>
               </div>
             </b-colxx>
-          </b-row>
+          </b-row> -->
         </b-card>
       </b-colxx>
     </b-row>
@@ -116,7 +116,6 @@ export default {
       ],
       randomCard: null,
       answer: null,
-      cardsLengthControl: false,
       lastCard: {
         front: 'You should add new cards',
         back: 'Denemek için kelimeler ekle!',
@@ -134,11 +133,6 @@ export default {
     ...mapGetters(['currentUser'])
   },
   watch: {
-    cards: function () {
-      if (this.cards.length === 0) {
-        this.cardsLengthControl = true
-      }
-    },
     'selectedCategory.name': async function (value) {
       value === 'all'
         ? await this.getCards()
@@ -175,12 +169,12 @@ export default {
       await this.randomQuestion()
     },
     async getFilteredCards (param) {
-      this.cards = []
       db.collection('users')
         .doc(this.currentUser.uid)
         .collection('cards')
         .where('category', '==', param)
         .onSnapshot(snapshotChange => {
+          this.cards = []
           snapshotChange.forEach(doc => {
             this.cards.push({
               key: doc.id,
@@ -195,9 +189,13 @@ export default {
       await this.randomQuestion()
     },
     async randomQuestion () {
-      this.randomCard = await this.cards[
-        Math.floor(Math.random() * this.cards.length)
-      ]
+      if (this.cards.length > 0) {
+        this.randomCard = await this.cards[
+          Math.floor(Math.random() * this.cards.length)
+        ]
+      } else {
+        this.$notify('success', 'Congratulations!', 'You learned all cards')
+      }
 
       this.answer = null
     },
