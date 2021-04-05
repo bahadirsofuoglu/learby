@@ -4,22 +4,14 @@
       <b-col md="8" sm="12">
         <b-card>
           <b-form>
-            <label class="form-group has-float-label">
+            <label class="form-group has-float-label mt-2">
               <input
                 type="text"
                 class="form-control"
                 required
-                v-model="updateCard.front"
+                v-model="categories.name"
               />
-              <span>Front</span>
-            </label>
-            <label class="form-group has-float-label">
-              <input
-                type="text"
-                class="form-control"
-                v-model="updateCard.back"
-              />
-              <span>Back</span>
+              <span>Add Category Name</span>
             </label>
           </b-form>
         </b-card>
@@ -27,17 +19,13 @@
       <b-col>
         <div class="mt-3">
           <ul class="flashcard-list">
-            <li
-              @click="
-                () => {
-                  updateCard.flipped = !updateCard.flipped
-                }
-              "
-            >
+            <li class="listed-card">
               <transition name="flip">
-                <p :key="updateCard.flipped" class="modalFlipCard">
-                  {{ updateCard.flipped ? updateCard.back : updateCard.front }}
-                </p>
+                <div class="modalFlipCard">
+                  <p class="card-text">
+                    {{ categories.name }}
+                  </p>
+                </div>
               </transition>
             </li>
           </ul>
@@ -50,23 +38,18 @@
 import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
-import { getDirection } from '../../../utils'
 import firebase from 'firebase'
+
 const db = firebase.firestore()
 export default {
   components: {
     'v-select': vSelect
   },
-  props: {
-    willUpdateCard: {
-      type: null
-    }
-  },
   data () {
     return {
-      direction: getDirection().direction,
-
-      updateCard: this.willUpdateCard
+      categories: {
+        name: ''
+      }
     }
   },
   computed: {
@@ -74,16 +57,22 @@ export default {
   },
 
   methods: {
-    updateCardMethod () {
+    addCategory () {
       db.collection('users')
         .doc(this.currentUser.uid)
-        .collection('cards')
-        .doc(this.updateCard.key)
-        .update(this.updateCard)
-        .then(this.$notify('success', 'Congratulations!', 'You Update a Card'))
+        .collection('categories')
+        .add(this.categories)
+        .then(
+          this.$notify(
+            'success',
+            'Congratulations!',
+            'You Added a New Category'
+          )
+        )
         .catch(error => {
           console.error(error)
         })
+      this.categoryName = ''
     }
   }
 }
@@ -102,7 +91,8 @@ li {
 }
 
 .modalFlipCard {
-  display: block;
+  display: flex;
+  flex-flow: row wrap;
   width: 150px;
   height: 175px;
   padding: 80px 50px;
@@ -121,7 +111,12 @@ li {
   box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   will-change: transform;
 }
-
+.card-text {
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: left;
+}
 li:hover {
   transform: scale(1.1);
 }
@@ -179,14 +174,7 @@ li:nth-child(-7n + 7) .flipCard {
   opacity: 0;
 }
 
-/* Form */
-
-label {
-  font-weight: 400;
-  color: #333;
-  margin-right: 10px;
-}
-#select {
+.vs--searchable .vs__dropdown-toggle {
   width: 98%;
 }
 </style>

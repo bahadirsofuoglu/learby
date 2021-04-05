@@ -2,6 +2,15 @@
   <div>
     <b-row>
       <b-colxx xxs="12">
+        <label class="form-group has-float-label ">
+          <v-select
+            label="name"
+            :options="categories"
+            v-model="selectedCategory"
+          />
+          <span>Select Category</span>
+        </label>
+
         <b-button
           v-b-toggle.collapse1
           variant="outline-secondary"
@@ -9,13 +18,14 @@
           class="mb-5"
           >Edit Menu</b-button
         >
+
         <b-collapse id="collapse1">
           <b-card>
             <b-button
               v-if="showMode == true"
               size="lg"
               variant="outline-success"
-              class="top-left-button-container"
+              class="top-left-button-container ml-3 mt-3"
               @click="showModeChange"
               >Table</b-button
             >
@@ -24,7 +34,7 @@
               v-if="showMode == false"
               size="lg"
               variant="outline-warning"
-              class="top-left-button-container"
+              class="top-left-button-container ml-3 mt-3"
               @click="showModeChange"
               >Cards</b-button
             >
@@ -32,18 +42,29 @@
               v-b-modal.modalAddCard
               variant="outline-primary"
               size="lg"
-              class="top-left-button-container"
+              class="top-left-button-container ml-3 mt-3"
               >Add Card</b-button
             >
           </b-card>
           <div class=" mb-5 mt-4"></div>
         </b-collapse>
 
-        <b-modal id="modalAddCard" size="lg" title="Add a New Card">
-          <AddCardModal ref="addCardModal" :willUpdateCard="willUpdateCard" />
+        <b-modal
+          id="modalAddCard"
+          ref="modalAddCard"
+          size="lg"
+          title="Add a New Card"
+        >
+          <AddCardModal ref="addCardModal" />
           <template slot="modal-footer">
             <b-button variant="warning" @click="addCard" class="mr-1"
               >Submit</b-button
+            >
+            <b-button
+              variant="primary"
+              @click="() => this.$refs.modalAddCard.hide()"
+              class="mr-1"
+              >Cancel</b-button
             >
           </template>
         </b-modal>
@@ -60,14 +81,17 @@
                 :key="card.front"
               >
                 <transition name="flip">
-                  <p v-bind:key="card.flipped" class="flipCard ml-5">
-                    {{ card.flipped ? card.back : card.front }}
-                    <span
-                      v-on:click="cards.splice(index, 1)"
-                      class="delete-card"
-                      >X</span
-                    >
-                  </p>
+                  <div class="flipCard ml-5">
+                    <p v-bind:key="card.flipped" class="text-card">
+                      <span class="form-card">{{ card.form }}</span>
+                      {{ card.flipped ? card.back : card.front }}
+                      <span
+                        v-on:click="cards.splice(index, 1)"
+                        class="delete-card"
+                        >X</span
+                      >
+                    </p>
+                  </div>
                 </transition>
               </li>
             </ul>
@@ -78,37 +102,50 @@
 
     <b-row v-if="showMode == false">
       <b-colxx xxs="12">
-        <Edit :cards="cards" />
+        <CardEditTable :cards="cards" />
       </b-colxx>
     </b-row>
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import firebase from 'firebase'
-import Edit from '../table/Edit.vue'
-import AddCardModal from '../editCardModals/AddCardModal'
+import CardEditTable from '../editScreens/CardEditTable.vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
+import AddCardModal from '../editScreens/AddCardModal'
+
 const db = firebase.firestore()
 
 export default {
   components: {
-    Edit,
-    AddCardModal
+    CardEditTable,
+    AddCardModal,
+    vSelect
   },
 
   data () {
     return {
       showMode: true,
       cards: [],
-      willUpdateCard: null
+      categories: [{ name: 'all' }],
+      selectedCategory: null
     }
   },
 
-  created () {
-    this.get()
+  async mounted () {
+    await this.getCards()
+    await this.getCategories()
   },
   computed: {
     ...mapGetters(['currentUser', 'processing', 'loginError'])
+  },
+  watch: {
+    'selectedCategory.name': async function (value) {
+      value === 'all'
+        ? await this.getCards()
+        : await this.getFilteredCards(value)
+    }
   },
   methods: {
     addCard () {
@@ -122,7 +159,7 @@ export default {
     showModeChange () {
       this.showMode = !this.showMode
     },
-    get () {
+    getCards () {
       db.collection('users')
         .doc(this.currentUser.uid)
         .collection('cards')
@@ -133,8 +170,43 @@ export default {
               key: doc.id,
               front: doc.data().front,
               back: doc.data().back,
-
+              category: doc.data().category,
+              form: doc.data().form,
               flipped: doc.data().flipped
+            })
+          })
+        })
+    },
+    getFilteredCards (param) {
+      db.collection('users')
+        .doc(this.currentUser.uid)
+        .collection('cards')
+        .where('category', '==', param)
+        .onSnapshot(snapshotChange => {
+          this.cards = []
+          snapshotChange.forEach(doc => {
+            this.cards.push({
+              key: doc.id,
+              front: doc.data().front,
+              back: doc.data().back,
+              category: doc.data().category,
+              form: doc.data().form,
+              flipped: doc.data().flipped
+            })
+          })
+        })
+    },
+    getCategories () {
+      this.categories = []
+      this.categories.push({ name: 'all' })
+      db.collection('users')
+        .doc(this.currentUser.uid)
+        .collection('categories')
+        .onSnapshot(snapshotChange => {
+          snapshotChange.forEach(doc => {
+            this.categories.push({
+              key: doc.id,
+              name: doc.data().name
             })
           })
         })
@@ -142,7 +214,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 ul {
   padding-left: 0;
   display: flex;
@@ -167,15 +239,18 @@ li {
   line-height: 27px;
   cursor: pointer;
   position: relative;
-  color: #fff;
-  font-weight: 600;
-  font-size: 20px;
   -webkit-box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   -moz-box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
   will-change: transform;
 }
-
+.text-card {
+  display: block;
+  color: #fff;
+  text-align: inherit;
+  font-weight: 600;
+  font-size: 15px;
+}
 li:hover {
   transform: scale(1.1);
 }
@@ -232,12 +307,25 @@ li:nth-child(-7n + 7) .flipCard {
   transform: rotateY(180deg);
   opacity: 0;
 }
+.form-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 10px 15px;
+  opacity: 0.8;
+  transition: all 0.5s ease;
+}
 
+.form-card:hover,
 /* Form */
 
 label {
   font-weight: 400;
   color: #333;
   margin-right: 10px;
+}
+
+.v-select {
+  width: 250px;
 }
 </style>

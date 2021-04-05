@@ -32,9 +32,9 @@
       </template>
     </vuetable>
     <b-modal id="forEdit" size="lg" title="Update Card">
-      <UpdateCardModal ref="updateCardModal" :willUpdateCard="willUpdateCard" />
+      <UpdateCardModal ref="updateCardModal" :updateCard="updateCard" />
       <template slot="modal-footer">
-        <b-button variant="warning" @click="updateCard" class="mr-1"
+        <b-button variant="warning" @click="onClickUpdateCard" class="mr-1"
           >Update</b-button
         >
       </template>
@@ -42,7 +42,7 @@
   </b-card>
 </template>
 <script>
-import UpdateCardModal from '../editCardModals/UpdateCardModal'
+import UpdateCardModal from '../editScreens/UpdateCardModal'
 import { mapGetters } from 'vuex'
 import Vuetable from 'vuetable-2/src/components/Vuetable'
 import firebase from 'firebase'
@@ -62,21 +62,32 @@ export default {
       fields: [
         {
           name: 'front',
-
           title: 'Front',
           titleClass: 'back',
           dataClass: 'list-item-heading',
-          width: '30%'
+          width: '25%'
         },
         {
           name: 'back',
-
           title: 'Back',
           titleClass: '',
           dataClass: 'list-item-heading',
-          width: '30%'
+          width: '25%'
         },
-
+        {
+          name: 'category',
+          title: 'Category',
+          titleClass: '',
+          dataClass: 'list-item-heading',
+          width: '20%'
+        },
+        {
+          name: 'form',
+          title: 'Form',
+          titleClass: '',
+          dataClass: 'list-item-heading',
+          width: '20%'
+        },
         {
           name: '__slot:actions',
           title: 'Actions',
@@ -85,7 +96,7 @@ export default {
           width: '20%'
         }
       ],
-      willUpdateCard: null
+      updateCard: {}
     }
   },
   created () {},
@@ -104,11 +115,11 @@ export default {
           console.error(error)
         })
     },
-    updateCard () {
+    onClickUpdateCard () {
       this.$refs.updateCardModal.updateCardMethod()
     },
     onEdit (row) {
-      this.willUpdateCard = row.rowData
+      this.updateCard = row.rowData
     }
   }
 }

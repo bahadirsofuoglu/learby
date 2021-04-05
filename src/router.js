@@ -38,6 +38,14 @@ const routes = [
                 /* webpackChunkName: "user" */ './views/app/questionMode/CardsQuestionMode.vue'
               )
             // meta: { roles: [UserRole.Admin, UserRole.Editor] },
+          },
+          {
+            path: `${adminRoot}/categories`,
+            component: () =>
+              import(
+                /* webpackChunkName: "user" */ './views/app/category/CategoryEdit.vue'
+              )
+            // meta: { roles: [UserRole.Admin, UserRole.Editor] },
           }
         ]
       }
