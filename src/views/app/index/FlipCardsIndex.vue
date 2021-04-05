@@ -108,7 +108,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import firebase from 'firebase'
 import CardEditTable from '../editScreens/CardEditTable.vue'
 import vSelect from 'vue-select'
@@ -128,7 +128,7 @@ export default {
     return {
       showMode: true,
       cards: [],
-      categories: [{ name: 'All' }],
+      categories: [{ name: 'all' }],
       selectedCategory: null
     }
   },
