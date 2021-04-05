@@ -45,13 +45,6 @@
               class="top-left-button-container ml-3 mt-3"
               >Add Card</b-button
             >
-            <b-button
-              v-b-modal.modalAddCategory
-              variant="outline-warning"
-              size="lg"
-              class="top-left-button-container ml-3 mt-3"
-              >Add Category</b-button
-            >
           </b-card>
           <div class=" mb-5 mt-4"></div>
         </b-collapse>
@@ -71,22 +64,6 @@
               variant="primary"
               @click="() => this.$refs.modalAddCard.hide()"
               class="mr-1"
-              >Cancel</b-button
-            >
-          </template>
-        </b-modal>
-        <b-modal
-          id="modalAddCategory"
-          ref="modalAddCategory"
-          size="lg"
-          title="Add New Category"
-        >
-          <AddCategoryModal ref="addCategoryModal" />
-          <template slot="modal-footer">
-            <b-button variant="warning" @click="addCategory" class="mr-1"
-              >Submit</b-button
-            >
-            <b-button variant="primary" @click="hideCategoryModel" class="mr-1"
               >Cancel</b-button
             >
           </template>
@@ -125,7 +102,7 @@
 
     <b-row v-if="showMode == false">
       <b-colxx xxs="12">
-        <Edit :cards="cards" />
+        <CardEditTable :cards="cards" />
       </b-colxx>
     </b-row>
   </div>
@@ -133,18 +110,17 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
-import Edit from '../table/Edit.vue'
+import CardEditTable from '../editScreens/CardEditTable.vue'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 import AddCardModal from '../editScreens/AddCardModal'
-import AddCategoryModal from '../editScreens/AddCategoryModal'
+
 const db = firebase.firestore()
 
 export default {
   components: {
-    Edit,
+    CardEditTable,
     AddCardModal,
-    AddCategoryModal,
     vSelect
   },
 
@@ -175,10 +151,7 @@ export default {
     addCard () {
       this.$refs.addCardModal.addCard()
     },
-    async addCategory () {
-      this.$refs.addCategoryModal.addCategory()
-      await this.getCategories
-    },
+
     toggleCard (card) {
       card.flipped = !card.flipped
     },
@@ -237,10 +210,6 @@ export default {
             })
           })
         })
-    },
-    async hideCategoryModel () {
-      this.$refs.modalAddCategory.hide()
-      await this.getCategories()
     }
   }
 }

@@ -62,7 +62,6 @@ export default {
       fields: [
         {
           name: 'front',
-
           title: 'Front',
           titleClass: 'back',
           dataClass: 'list-item-heading',
@@ -70,7 +69,6 @@ export default {
         },
         {
           name: 'back',
-
           title: 'Back',
           titleClass: '',
           dataClass: 'list-item-heading',

@@ -79,13 +79,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import firebase from 'firebase'
-import Edit from '../table/Edit.vue'
+
 import AddCardModal from '../editScreens/AddCardModal'
 const db = firebase.firestore()
 
 export default {
   components: {
-    Edit,
     AddCardModal
   },
 

@@ -13,6 +13,12 @@ const data = [
     icon: 'simple-icon-question',
     label: 'Quiz Mode',
     to: `${adminRoot}/questions`
+  },
+  {
+    id: 'piaf',
+    icon: 'simple-icon-folder',
+    label: 'Category',
+    to: `${adminRoot}/categories`
   }
 
   /* {
