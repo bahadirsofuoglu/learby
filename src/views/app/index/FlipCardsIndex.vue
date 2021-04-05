@@ -86,10 +86,7 @@
             <b-button variant="warning" @click="addCategory" class="mr-1"
               >Submit</b-button
             >
-            <b-button
-              variant="primary"
-              @click="() => this.$refs.modalAddCategory.hide()"
-              class="mr-1"
+            <b-button variant="primary" @click="hideCategoryModel" class="mr-1"
               >Cancel</b-button
             >
           </template>
@@ -179,8 +176,9 @@ export default {
     addCard () {
       this.$refs.addCardModal.addCard()
     },
-    addCategory () {
+    async addCategory () {
       this.$refs.addCategoryModal.addCategory()
+      await this.getCategories
     },
     toggleCard (card) {
       card.flipped = !card.flipped
@@ -225,6 +223,8 @@ export default {
         })
     },
     getCategories () {
+      this.categories = []
+      this.categories.push({ name: 'all' })
       db.collection('users')
         .doc(this.currentUser.uid)
         .collection('categories')
@@ -236,6 +236,10 @@ export default {
             })
           })
         })
+    },
+    async hideCategoryModel () {
+      this.$refs.modalAddCategory.hide()
+      await this.getCategories()
     }
   }
 }

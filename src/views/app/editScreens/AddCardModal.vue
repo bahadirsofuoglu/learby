@@ -82,7 +82,14 @@ export default {
         flipped: false
       },
       categories: [],
-      forms: [{ name: 'verb' }]
+      forms: [
+        { name: 'adjective' },
+        { name: 'adverb' },
+        { name: 'verb' },
+        { name: 'noun' },
+        { name: 'pronoun' },
+        { name: 'conjunction' }
+      ]
     }
   },
   computed: {
