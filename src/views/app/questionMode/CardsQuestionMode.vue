@@ -97,12 +97,10 @@ import { mapGetters } from 'vuex'
 import firebase from 'firebase'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
-import AddCardModal from '../editScreens/AddCardModal'
 const db = firebase.firestore()
 
 export default {
   components: {
-    AddCardModal,
     vSelect
   },
 

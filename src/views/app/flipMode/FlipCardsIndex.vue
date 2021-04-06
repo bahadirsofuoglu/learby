@@ -110,10 +110,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import firebase from 'firebase'
-import CardEditTable from '../editScreens/CardEditTable.vue'
+import CardEditTable from './CardEditTable.vue'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
-import AddCardModal from '../editScreens/AddCardModal'
+import AddCardModal from './AddCardModal'
 
 const db = firebase.firestore()
 
