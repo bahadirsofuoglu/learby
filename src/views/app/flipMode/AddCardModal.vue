@@ -58,12 +58,9 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
-import firebase from 'firebase'
-
-const db = firebase.firestore()
+import { addNewCard, getCategories } from '@/data/dbControllers.js'
 export default {
   components: {
     'v-select': vSelect
@@ -86,43 +83,21 @@ export default {
       selectedForm: {}
     }
   },
-  computed: {
-    ...mapGetters(['currentUser'])
-  },
   async mounted () {
-    await this.getCategories()
+    this.categories = await getCategories()
   },
   methods: {
-    addCard () {
+    async addCard () {
       this.newCard.category = this.selectedCategory.name
       this.newCard.form = this.selectedForm.name
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('cards')
-        .add(this.newCard)
+      await addNewCard(this.newCard)
         .then(
           this.$notify('success', 'Congratulations!', 'You Added a New Card')
         )
         .catch(error => {
           console.error(error)
         })
-      this.newCard.front = null
-      this.newCard.back = null
-
-      this.newCard.flipped = false
-    },
-    getCategories () {
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('categories')
-        .onSnapshot(snapshotChange => {
-          snapshotChange.forEach(doc => {
-            this.categories.push({
-              key: doc.id,
-              name: doc.data().name
-            })
-          })
-        })
+      this.newCard = { flipped: false }
     }
   }
 }
