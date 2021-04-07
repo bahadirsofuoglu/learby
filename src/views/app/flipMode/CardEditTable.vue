@@ -44,7 +44,7 @@
 <script>
 import UpdateCardModal from './UpdateCardModal'
 import Vuetable from 'vuetable-2/src/components/Vuetable'
-import { deleteCard, getCards } from '@/data/dbControllers.js'
+
 export default {
   components: {
     vuetable: Vuetable,
