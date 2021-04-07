@@ -102,13 +102,12 @@
 
     <b-row v-if="showMode == false">
       <b-colxx xxs="12">
-        <CardEditTable :cards="cards" />
+        <CardEditTable @onDelete="onClickDelete" :cards="cards" />
       </b-colxx>
     </b-row>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 import AddCardModal from './AddCardModal'
@@ -116,7 +115,8 @@ import CardEditTable from './CardEditTable.vue'
 import {
   getCards,
   getFilteredCards,
-  getCategories
+  getCategories,
+  deleteCard
 } from '@/data/dbControllers.js'
 
 export default {
@@ -138,9 +138,6 @@ export default {
     this.cards = await getCards()
     this.categories = await getCategories()
   },
-  computed: {
-    ...mapGetters(['currentUser', 'processing', 'loginError'])
-  },
   watch: {
     'selectedCategory.name': async function (value) {
       this.cards = []
@@ -152,6 +149,15 @@ export default {
   methods: {
     async addCard () {
       this.$refs.addCardModal.addCard()
+      this.cards = await getCards()
+    },
+    async onClickDelete (param) {
+      const keyData = param
+      await deleteCard(keyData)
+        .then(this.$notify('warning', 'Hey!!', 'You Deleted a Card'))
+        .catch(error => {
+          console.error(error)
+        })
       this.cards = await getCards()
     },
     toggleCard (card) {

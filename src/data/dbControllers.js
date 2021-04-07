@@ -46,7 +46,11 @@ export const getFilteredCards = async selectedCategory => {
 export const addNewCard = async newCard => {
   db.collection('cards').add(newCard)
 }
-
+export const deleteCard = async keyData => {
+  db.collection('cards')
+    .doc(keyData)
+    .delete()
+}
 export const getCategories = async () => {
   const response = []
   response.push({ name: 'all' })

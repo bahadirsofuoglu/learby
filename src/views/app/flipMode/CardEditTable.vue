@@ -15,7 +15,7 @@
             <b-button
               v-b-modal.forEdit
               size="xs"
-              variant="outline-warning"
+              variant="outline-warning ml-2"
               @click="onEdit(row)"
             >
               <i class="simple-icon-pencil"
@@ -43,10 +43,8 @@
 </template>
 <script>
 import UpdateCardModal from './UpdateCardModal'
-import { mapGetters } from 'vuex'
 import Vuetable from 'vuetable-2/src/components/Vuetable'
-import firebase from 'firebase'
-const db = firebase.firestore()
+import { deleteCard, getCards } from '@/data/dbControllers.js'
 export default {
   components: {
     vuetable: Vuetable,
@@ -54,7 +52,7 @@ export default {
   },
   props: {
     cards: {
-      type: null
+      type: Array
     }
   },
   data () {
@@ -99,21 +97,10 @@ export default {
       updateCard: {}
     }
   },
-  created () {},
-  computed: {
-    ...mapGetters(['currentUser'])
-  },
   methods: {
     onDelete (row) {
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('cards')
-        .doc(row.rowData.key)
-        .delete()
-        .then(this.$notify('warning', 'Hey!!', 'You Deleted a Card'))
-        .catch(error => {
-          console.error(error)
-        })
+      const keyData = row.rowData.key
+      this.$emit('onDelete', keyData)
     },
     onClickUpdateCard () {
       this.$refs.updateCardModal.updateCardMethod()
