@@ -4,7 +4,6 @@ import createPersistedState from 'vuex-persistedstate'
 import app from '../main'
 import menu from './modules/menu'
 import user from './modules/user'
-import { setCurrentLanguage } from '../utils'
 
 Vue.use(Vuex)
 

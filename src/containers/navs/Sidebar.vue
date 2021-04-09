@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar" @click.stop="() => {}">
+  <div class="sidebar">
     <div class="main-menu">
       <vue-perfect-scrollbar
         class="scroll"
@@ -55,7 +55,6 @@ import {
   subHiddenBreakpoint
 } from '../../constants/config'
 import menuItems from '../../constants/menu'
-import { UserRole } from '../../utils/auth.roles'
 
 export default {
   data () {
