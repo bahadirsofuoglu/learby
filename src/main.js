@@ -6,10 +6,7 @@ import BootstrapVue from 'bootstrap-vue'
 // Router & Store add
 import router from './router'
 import store from './store'
-// Multi Language Add
-import en from './locales/en.json'
-import es from './locales/es.json'
-import VueI18n from 'vue-i18n'
+
 import { firebaseConfig } from './constants/config'
 // Notification Component Add
 import Notifications from './components/Common/Notification'
@@ -29,14 +26,7 @@ import 'firebase/auth'
 import { getCurrentLanguage } from './utils'
 
 Vue.use(BootstrapVue)
-Vue.use(VueI18n)
-const messages = { en: en, es: es }
-const locale = getCurrentLanguage()
-const i18n = new VueI18n({
-  locale: locale,
-  fallbackLocale: 'en',
-  messages
-})
+
 Vue.use(Notifications)
 Vue.use(require('vue-shortkey'))
 Vue.use(contentmenu)
@@ -55,7 +45,6 @@ firebase.initializeApp(firebaseConfig)
 Vue.config.productionTip = false
 
 export default new Vue({
-  i18n,
   router,
   store,
   render: h => h(App)
