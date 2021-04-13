@@ -13,7 +13,7 @@
         <b-row>
           <b-colxx>
             <b-button
-              v-b-modal.forEdit
+              v-b-modal.modalUpdateCard
               size="xs"
               variant="outline-warning ml-2"
               @click="onEdit(row)"
@@ -31,11 +31,22 @@
         </b-row>
       </template>
     </vuetable>
-    <b-modal id="forEdit" size="lg" title="Update Card">
+    <b-modal
+      id="modalUpdateCard"
+      ref="modalUpdateCard"
+      size="lg"
+      title="Update Card"
+    >
       <UpdateCardModal ref="updateCardModal" :updateCard="updateCard" />
       <template slot="modal-footer">
         <b-button variant="warning" @click="onClickUpdateCard" class="mr-1"
           >Update</b-button
+        >
+        <b-button
+          variant="primary"
+          @click="() => this.$refs.modalUpdateCard.hide()"
+          class="mr-1"
+          >Cancel</b-button
         >
       </template>
     </b-modal>

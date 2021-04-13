@@ -47,40 +47,12 @@
               </label>
             </div>
           </b-row>
-          <!--       <b-row v-if="cardsLengthControl">
-            <b-colxx xxs="3" md="5"></b-colxx>
-            <b-colxx xxs="4" md="4">
-              <div class="float-left">
-                <transition name="flip">
-                  <p
-                    v-bind:key="lastCard.flipped"
-                    :class="lastCard.flipped ? 'flipCard' : 'backflipCard'"
-                  >
-                    {{ lastCard.flipped ? lastCard.back : lastCard.front }}
-                  </p>
-                </transition>
-                <b-row>
-                  <b-colxx xxs="3" md="5">
-                    <b-button
-                      variant="warning"
-                      style="min-width: 50px"
-                      class=" mt-3 float-left"
-                      @click="toggleLastCard"
-                      >Flip
-                    </b-button>
-                  </b-colxx>
-                  <b-colxx xxs="4" md="4"> </b-colxx>
-                </b-row>
-              </div>
-            </b-colxx>
-          </b-row> -->
         </b-card>
       </b-colxx>
     </b-row>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 import {
@@ -96,17 +68,16 @@ export default {
 
   data () {
     return {
-      showMode: true,
       cards: [],
       randomCard: {},
       question: '',
       answer: '',
       userAnswer: '',
-      lastCard: {
+      /*   lastCard: {
         front: 'You should add new cards',
         back: 'Denemek için kelimeler ekle!',
         flipped: false
-      },
+      }, */
       categories: [],
       selectedCategory: 'all'
     }
@@ -122,9 +93,6 @@ export default {
 
       await this.randomQuestion()
     }
-  },
-  computed: {
-    ...mapGetters(['currentUser'])
   },
   methods: {
     toggleCard () {
@@ -151,12 +119,12 @@ export default {
           this.answer = this.randomCard.back
         }
       } else {
-        this.$notify('success', 'Congratulations!', 'You learned all cards')
+        this.$notify('success', 'Congratulations!', 'Add cards to continue')
       }
     },
     async answerQuestion (userAnswer) {
       if (this.answer === userAnswer) {
-        this.$notify('success', 'Congratulations!', 'Your Answer is true. ')
+        this.$notify('success', 'Congratulations!', 'Your answer is true. ')
 
         this.cards = await this.cards.filter(x => x !== this.randomCard)
 
