@@ -13,52 +13,39 @@
       </b-colxx>
       <b-colxx xxs="12">
         <b-card :title="'Question Mode'" style="min-height: 700px">
-          <br />
-          <br />
-          <br />
-          <br />
-          <b-row>
-            <b-colxx xxs="1" md="5"></b-colxx>
-            <b-colxx xxs="4" md="4">
-              <div class="float-left">
-                <transition name="flip">
-                  <p
-                    v-if="randomCard"
-                    v-bind:key="randomCard.flipped"
-                    :class="randomCard.flipped ? 'backflipCard' : 'flipCard'"
-                  >
-                    {{
-                      randomCard.flipped ? randomCard.back : randomCard.front
-                    }}
-                  </p>
-                </transition>
-                <b-row>
-                  <b-colxx xxs="3" md="5">
-                    <label
-                      class="form-group has-float-label ml-2 mt-5 "
-                      style="min-width: 200px"
-                    >
-                      <input
-                        type="text"
-                        class="form-control"
-                        required
-                        v-model="answer"
-                        @keyup.enter="answerQuestion(answer)"
-                      />
-                      <span>Answer</span>
-                      <b-button
-                        variant="warning"
-                        style="min-width: 50px"
-                        class=" mt-3 float-left"
-                        @click="answerQuestion(answer)"
-                        >Check</b-button
-                      >
-                    </label>
-                  </b-colxx>
-                  <b-colxx xxs="4" md="4"> </b-colxx>
-                </b-row>
-              </div>
-            </b-colxx>
+          <b-row class="d-flex justify-content-center">
+            <div style=" margin-top:100px">
+              <transition name="flip">
+                <p
+                  v-if="randomCard"
+                  v-bind:key="randomCard.flipped"
+                  :class="randomCard.flipped ? 'backflipCard' : 'flipCard'"
+                >
+                  {{ randomCard.flipped ? answer : question }}
+                </p>
+              </transition>
+
+              <label
+                class="form-group has-float-label"
+                style="min-width: 200px; margin-top:50px"
+              >
+                <input
+                  type="text"
+                  class="form-control"
+                  required
+                  v-model="userAnswer"
+                  @keyup.enter="answerQuestion(userAnswer)"
+                />
+                <span>Answer</span>
+                <b-button
+                  variant="warning"
+                  style="min-width: 50px"
+                  class=" mt-3 float-left"
+                  @click="answerQuestion(userAnswer)"
+                  >Check</b-button
+                >
+              </label>
+            </div>
           </b-row>
           <!--       <b-row v-if="cardsLengthControl">
             <b-colxx xxs="3" md="5"></b-colxx>
@@ -94,10 +81,13 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import firebase from 'firebase'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
-const db = firebase.firestore()
+import {
+  getCategories,
+  getCards,
+  getFilteredCards
+} from '@/data/dbControllers.js'
 
 export default {
   components: {
@@ -107,37 +97,35 @@ export default {
   data () {
     return {
       showMode: true,
-      cards: [
-        {
-          front: 'Select a Category'
-        }
-      ],
-      randomCard: null,
-      answer: null,
+      cards: [],
+      randomCard: {},
+      question: '',
+      answer: '',
+      userAnswer: '',
       lastCard: {
         front: 'You should add new cards',
         back: 'Denemek için kelimeler ekle!',
         flipped: false
       },
       categories: [],
-      selectedCategory: null
+      selectedCategory: 'all'
     }
   },
   async mounted () {
-    await this.getCategories()
-    await this.getCards()
-  },
-  computed: {
-    ...mapGetters(['currentUser'])
+    this.categories = await getCategories()
   },
   watch: {
     'selectedCategory.name': async function (value) {
       value === 'all'
-        ? await this.getCards()
-        : await this.getFilteredCards(value)
+        ? (this.cards = await getCards())
+        : (this.cards = await getFilteredCards(value))
+
+      await this.randomQuestion()
     }
   },
-
+  computed: {
+    ...mapGetters(['currentUser'])
+  },
   methods: {
     toggleCard () {
       this.randomCard.flipped = !this.randomCard.flipped
@@ -148,63 +136,31 @@ export default {
     toggleLastCard () {
       this.lastCard.flipped = !this.lastCard.flipped
     },
-    async getCards () {
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('cards')
-        .onSnapshot(snapshotChange => {
-          this.cards = []
-          snapshotChange.forEach(doc => {
-            this.cards.push({
-              front: doc.data().front,
-              back: doc.data().back,
-              category: doc.data().category,
-              form: doc.data().form,
-              flipped: doc.data().flipped
-            })
-          })
-        })
-      await this.randomQuestion()
-    },
-    async getFilteredCards (param) {
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('cards')
-        .where('category', '==', param)
-        .onSnapshot(snapshotChange => {
-          this.cards = []
-          snapshotChange.forEach(doc => {
-            this.cards.push({
-              key: doc.id,
-              front: doc.data().front,
-              back: doc.data().back,
-              category: doc.data().category,
-              form: doc.data().form,
-              flipped: doc.data().flipped
-            })
-          })
-        })
-      await this.randomQuestion()
-    },
     async randomQuestion () {
       if (this.cards.length > 0) {
-        this.randomCard = await this.cards[
+        this.randomCard = this.cards[
           Math.floor(Math.random() * this.cards.length)
         ]
+
+        let random = Math.floor(Math.random() * 2)
+        if (random === 0) {
+          this.question = this.randomCard.back
+          this.answer = this.randomCard.front
+        } else {
+          this.question = this.randomCard.front
+          this.answer = this.randomCard.back
+        }
       } else {
         this.$notify('success', 'Congratulations!', 'You learned all cards')
       }
-
-      this.answer = null
     },
-    async answerQuestion (answer) {
-      if (this.randomCard.back === answer) {
+    async answerQuestion (userAnswer) {
+      if (this.answer === userAnswer) {
         this.$notify('success', 'Congratulations!', 'Your Answer is true. ')
 
         this.cards = await this.cards.filter(x => x !== this.randomCard)
 
         await this.randomQuestion()
-        this.answer = null
       } else {
         this.$notify('warning', 'Sorry', 'Your Answer is wrong. ')
         await this.toggleCard()
@@ -212,20 +168,7 @@ export default {
           await this.randomQuestion()
         }, 4000)
       }
-    },
-    getCategories () {
-      this.categories = []
-      this.categories.push({ name: 'all' })
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('categories')
-        .onSnapshot(snapshotChange => {
-          snapshotChange.forEach(doc => {
-            this.categories.push({
-              name: doc.data().name
-            })
-          })
-        })
+      this.userAnswer = ''
     }
   }
 }

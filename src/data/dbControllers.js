@@ -9,37 +9,40 @@ const db = firebase
 export const getCards = async () => {
   const response = []
 
-  await db.collection('cards').onSnapshot(snapshotChange => {
-    snapshotChange.forEach(doc => {
-      response.push({
-        key: doc.id,
-        front: doc.data().front,
-        back: doc.data().back,
-        category: doc.data().category,
-        form: doc.data().form,
-        flipped: doc.data().flipped
-      })
+  const cardsRef = await db.collection('cards').get()
+
+  cardsRef.forEach(doc => {
+    response.push({
+      key: doc.id,
+      front: doc.data().front,
+      back: doc.data().back,
+      category: doc.data().category,
+      form: doc.data().form,
+      flipped: doc.data().flipped
     })
   })
+
   return response
 }
 
 export const getFilteredCards = async selectedCategory => {
   const response = []
-  db.collection('cards')
+  const cardRef = await db
+    .collection('cards')
     .where('category', '==', selectedCategory)
-    .onSnapshot(snapshotChange => {
-      snapshotChange.forEach(doc => {
-        response.push({
-          key: doc.id,
-          front: doc.data().front,
-          back: doc.data().back,
-          category: doc.data().category,
-          form: doc.data().form,
-          flipped: doc.data().flipped
-        })
-      })
+    .get()
+
+  cardRef.forEach(doc => {
+    response.push({
+      key: doc.id,
+      front: doc.data().front,
+      back: doc.data().back,
+      category: doc.data().category,
+      form: doc.data().form,
+      flipped: doc.data().flipped
     })
+  })
+
   return response
 }
 
