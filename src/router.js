@@ -27,7 +27,7 @@ const routes = [
             path: `${adminRoot}/flipMode`,
             component: () =>
               import(
-                /* webpackChunkName: "piaf" */ './views/app/index/FlipCardsIndex.vue'
+                /* webpackChunkName: "piaf" */ './views/app/flipMode/FlipCardsIndex.vue'
               )
             // meta: { roles: [UserRole.Admin, UserRole.Editor] },
           },

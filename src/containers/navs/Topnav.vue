@@ -219,11 +219,6 @@ export default {
     this.isDarkActive = color.indexOf('dark') > -1
   },
   watch: {
-    '$i18n.locale' (to, from) {
-      if (from !== to) {
-        this.$router.go(this.$route.path)
-      }
-    },
     isDarkActive (val) {
       let color = getThemeColor()
       let isChange = false

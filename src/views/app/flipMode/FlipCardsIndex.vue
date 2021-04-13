@@ -102,20 +102,22 @@
 
     <b-row v-if="showMode == false">
       <b-colxx xxs="12">
-        <CardEditTable :cards="cards" />
+        <CardEditTable @onDelete="onClickDelete" :cards="cards" />
       </b-colxx>
     </b-row>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-import firebase from 'firebase'
-import CardEditTable from '../editScreens/CardEditTable.vue'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
-import AddCardModal from '../editScreens/AddCardModal'
-
-const db = firebase.firestore()
+import AddCardModal from './AddCardModal'
+import CardEditTable from './CardEditTable.vue'
+import {
+  getCards,
+  getFilteredCards,
+  getCategories,
+  deleteCard
+} from '@/data/dbControllers.js'
 
 export default {
   components: {
@@ -123,93 +125,46 @@ export default {
     AddCardModal,
     vSelect
   },
-
   data () {
     return {
       showMode: true,
       cards: [],
-      categories: [{ name: 'all' }],
+      categories: [],
       selectedCategory: null
     }
   },
-
   async mounted () {
-    await this.getCards()
-    await this.getCategories()
-  },
-  computed: {
-    ...mapGetters(['currentUser', 'processing', 'loginError'])
+    this.cards = []
+    this.cards = await getCards()
+    this.categories = await getCategories()
   },
   watch: {
     'selectedCategory.name': async function (value) {
+      this.cards = []
       value === 'all'
-        ? await this.getCards()
-        : await this.getFilteredCards(value)
+        ? (this.cards = await getCards())
+        : (this.cards = await getFilteredCards(value))
     }
   },
   methods: {
-    addCard () {
+    async addCard () {
       this.$refs.addCardModal.addCard()
+      this.cards = await getCards()
     },
-
+    async onClickDelete (param) {
+      const keyData = param
+      await deleteCard(keyData)
+        .then(this.$notify('warning', 'Hey!!', 'You Deleted a Card'))
+        .catch(error => {
+          console.error(error)
+        })
+      this.cards = await getCards()
+    },
     toggleCard (card) {
       card.flipped = !card.flipped
     },
-
     showModeChange () {
       this.showMode = !this.showMode
-    },
-    getCards () {
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('cards')
-        .onSnapshot(snapshotChange => {
-          this.cards = []
-          snapshotChange.forEach(doc => {
-            this.cards.push({
-              key: doc.id,
-              front: doc.data().front,
-              back: doc.data().back,
-              category: doc.data().category,
-              form: doc.data().form,
-              flipped: doc.data().flipped
-            })
-          })
-        })
-    },
-    getFilteredCards (param) {
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('cards')
-        .where('category', '==', param)
-        .onSnapshot(snapshotChange => {
-          this.cards = []
-          snapshotChange.forEach(doc => {
-            this.cards.push({
-              key: doc.id,
-              front: doc.data().front,
-              back: doc.data().back,
-              category: doc.data().category,
-              form: doc.data().form,
-              flipped: doc.data().flipped
-            })
-          })
-        })
-    },
-    getCategories () {
-      this.categories = []
-      this.categories.push({ name: 'all' })
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('categories')
-        .onSnapshot(snapshotChange => {
-          snapshotChange.forEach(doc => {
-            this.categories.push({
-              key: doc.id,
-              name: doc.data().name
-            })
-          })
-        })
     }
   }
 }

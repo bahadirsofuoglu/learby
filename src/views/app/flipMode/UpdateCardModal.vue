@@ -68,11 +68,9 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
-import firebase from 'firebase'
-const db = firebase.firestore()
+import { updateCard, getCategories } from '@/data/dbControllers.js'
 export default {
   components: {
     'v-select': vSelect
@@ -90,32 +88,15 @@ export default {
       selectedForm: {}
     }
   },
-  computed: {
-    ...mapGetters(['currentUser'])
-  },
   async mounted () {
-    await this.getCategories()
+    this.categories = await getCategories()
   },
   methods: {
-    updateCardMethod () {
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('cards')
-        .doc(this.updateCard.key)
-        .update(this.updateCard)
-        .then(this.$notify('success', 'Congratulations!', 'You Update a Card'))
+    async updateCardMethod () {
+      await updateCard(this.updateCard)
+        .then(this.$notify('success', 'Congratulations!', 'You Updated a Card'))
         .catch(error => {
           console.error(error)
-        })
-    },
-    getCategories () {
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('categories')
-        .onSnapshot(snapshotChange => {
-          snapshotChange.forEach(doc => {
-            this.categories.push(`${doc.data().name}`)
-          })
         })
     }
   }

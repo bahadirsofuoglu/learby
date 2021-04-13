@@ -13,9 +13,9 @@
         <b-row>
           <b-colxx>
             <b-button
-              v-b-modal.forEdit
+              v-b-modal.modalUpdateCard
               size="xs"
-              variant="outline-warning"
+              variant="outline-warning ml-2"
               @click="onEdit(row)"
             >
               <i class="simple-icon-pencil"
@@ -31,22 +31,31 @@
         </b-row>
       </template>
     </vuetable>
-    <b-modal id="forEdit" size="lg" title="Update Card">
+    <b-modal
+      id="modalUpdateCard"
+      ref="modalUpdateCard"
+      size="lg"
+      title="Update Card"
+    >
       <UpdateCardModal ref="updateCardModal" :updateCard="updateCard" />
       <template slot="modal-footer">
         <b-button variant="warning" @click="onClickUpdateCard" class="mr-1"
           >Update</b-button
+        >
+        <b-button
+          variant="primary"
+          @click="() => this.$refs.modalUpdateCard.hide()"
+          class="mr-1"
+          >Cancel</b-button
         >
       </template>
     </b-modal>
   </b-card>
 </template>
 <script>
-import UpdateCardModal from '../editScreens/UpdateCardModal'
-import { mapGetters } from 'vuex'
+import UpdateCardModal from './UpdateCardModal'
 import Vuetable from 'vuetable-2/src/components/Vuetable'
-import firebase from 'firebase'
-const db = firebase.firestore()
+
 export default {
   components: {
     vuetable: Vuetable,
@@ -54,7 +63,7 @@ export default {
   },
   props: {
     cards: {
-      type: null
+      type: Array
     }
   },
   data () {
@@ -99,21 +108,10 @@ export default {
       updateCard: {}
     }
   },
-  created () {},
-  computed: {
-    ...mapGetters(['currentUser'])
-  },
   methods: {
     onDelete (row) {
-      db.collection('users')
-        .doc(this.currentUser.uid)
-        .collection('cards')
-        .doc(row.rowData.key)
-        .delete()
-        .then(this.$notify('warning', 'Hey!!', 'You Deleted a Card'))
-        .catch(error => {
-          console.error(error)
-        })
+      const keyData = row.rowData.key
+      this.$emit('onDelete', keyData)
     },
     onClickUpdateCard () {
       this.$refs.updateCardModal.updateCardMethod()

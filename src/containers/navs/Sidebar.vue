@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar" @click.stop="() => {}">
+  <div class="sidebar">
     <div class="main-menu">
       <vue-perfect-scrollbar
         class="scroll"
@@ -23,7 +23,7 @@
               target="_blank"
             >
               <i :class="item.icon" />
-              {{ $t(item.label) }}
+              {{ item.label }}
             </a>
             <a
               v-else-if="item.subs && item.subs.length > 0"
@@ -31,7 +31,7 @@
               :href="`#${item.to}`"
             >
               <i :class="item.icon" />
-              {{ $t(item.label) }}
+              {{ item.label }}
             </a>
             <router-link
               v-else
@@ -39,7 +39,7 @@
               :to="item.to"
             >
               <i :class="item.icon" />
-              {{ $t(item.label) }}
+              {{ item.label }}
             </router-link>
           </li>
         </ul>
@@ -55,7 +55,6 @@ import {
   subHiddenBreakpoint
 } from '../../constants/config'
 import menuItems from '../../constants/menu'
-import { UserRole } from '../../utils/auth.roles'
 
 export default {
   data () {
